@@ -4,9 +4,11 @@ its own isolated root.
 It will also contain all the necessary shared objects, headers, and other
 things, and as such will be distributable as a single stand-alone RPM, and
 shouldn't depend on /opt/freeware at all.
+It is also simplified by the fact that this will only expect to build 64-bit,
+not multilib.
 
-Most packages, patches, and other niceties are modified from the files provided
-by the wonderful resource that is www.perzl.org.  Thank you, Michael Perzl.
+Most packages and other niceties are modified from the files provided by the
+wonderful resource that is www.perzl.org.  Thank you, Michael Perzl.
 
 This is Python version 3.5.1
 ============================
