@@ -1,3 +1,13 @@
+This is a repository dedicated solely to providing a spec file and making some
+small patches to cpython to enable it to properly build and package in AIX in
+its own isolated root.
+It will also contain all the necessary shared objects, headers, and other
+things, and as such will be distributable as a single stand-alone RPM, and
+shouldn't depend on /opt/freeware at all.
+
+Most packages, patches, and other niceties are modified from the files provided
+by the wonderful resource that is www.perzl.org.  Thank you, Michael Perzl.
+
 This is Python version 3.5.1
 ============================
 
