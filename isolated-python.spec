@@ -32,7 +32,6 @@ BuildRequires: openssl-devel >= 1.0.1
 BuildRequires: pkg-config
 BuildRequires: readline-devel >= 5.2-3
 BuildRequires: tcl-devel >= 8.5.8-2
-BuildRequires: tk-devel >= 8.5.8-1
 BuildRequires: sqlite-devel >= 3.7.3-1
 BuildRequires: zlib-devel >= 1.2.3-3
 
@@ -81,8 +80,8 @@ autoconf
     --prefix=%{pythonroot} \
     --libdir=%{_libdir64} \
     --mandir=%{_mandir} \
-    --with-gcc="$CC -ma -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --with-cxx-main="$CXX -ma -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-gcc="$CC -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-cxx-main="$CXX -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
     --enable-shared \
 %ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
     --disable-ipv6 \
@@ -94,12 +93,12 @@ autoconf
     --with-system-ffi \
     OPT="-O2"
 
-gmake %{?_smp_mflags} libpython%{pybasever}.a
+gmake %{?_smp_mflags} libpython%{pybasever}m.a
 
-CreateExportList -X64 libpython.exp libpython%{pybasever}.a
-$CC -q64 -qmkshrobj libpython%{pybasever}.a -o libpython%{pybasever}.so -bE:libpython.exp -lm
-rm -f libpython.exp libpython%{pybasever}.a
-${AR} -rv libpython%{pybasever}.a libpython%{pybasever}.so
+CreateExportList -X64 libpython.exp libpython%{pybasever}m.a
+$CC -q64 -qmkshrobj libpython%{pybasever}m.a -o libpython%{pybasever}m.so -bE:libpython.exp -lm
+rm -f libpython.exp libpython%{pybasever}m.a
+${AR} -rv libpython%{pybasever}m.a libpython%{pybasever}m.so
 
 gmake %{?_smp_mflags}
 
@@ -111,18 +110,17 @@ gmake DESTDIR=%{buildroot} install
 
 /usr/bin/strip -X32_64 %{buildroot}%{_bindir}/* || :
 
-cp libpython%{pybasever}.a %{buildroot}%{_libdir64}/libpython%{pybasever}.a
-chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}.a
+cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
+chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
 find %{buildroot}%{_libdir64}/python%{pybasever}/lib-dynload -type d | sed "s|%{buildroot}|%dir |" >> dynfiles
 find %{buildroot}%{_libdir64}/python%{pybasever}/lib-dynload -type f | \
-  grep -v "_tkinter.so$" | \
   grep -v "_ctypes_test.so$" | \
   grep -v "_testcapi.so$" | \
   sed "s|%{buildroot}||" >> dynfiles
 
-ln -sf ../../libpython%{pybasever}.a %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}.a
-ln -sf ../../libpython%{pybasever}.so %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}.so
+ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.a
+ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.so
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -179,8 +177,8 @@ ln -sf ../../libpython%{pybasever}.so %{buildroot}%{_libdir64}/python%{pybasever
 %{_bindir}/python*
 
 # Libs
-%{_libdir64}/libpython%{pybasever}.a
-%{_libdir64}/libpython%{pybasever}.so
+%{_libdir64}/libpython%{pybasever}m.a
+%{_libdir64}/libpython%{pybasever}m.so
 
 # Devel
 %doc Misc/README.valgrind Misc/valgrind-python.supp
