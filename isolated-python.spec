@@ -15,7 +15,7 @@ Release: 0
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
-Source0: %{name}-%{pybasever}.5.tar.gz
+Source0: %{name}-%{pybasever}.tar.gz
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -65,7 +65,7 @@ package.
 
 %prep
 export PATH=/opt/freeware/bin:$PATH
-%setup -q -n %{name}-%{pybasever}
+%setup -q -n %{name}
 rm -rf Modules/expat Modules/zlib
 
 %build
