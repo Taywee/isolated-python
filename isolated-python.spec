@@ -93,13 +93,6 @@ autoconf
     --with-system-ffi \
     OPT="-O2"
 
-gmake %{?_smp_mflags} libpython%{pybasever}m.a
-
-CreateExportList -X64 libpython.exp libpython%{pybasever}m.a
-$CC -q64 -qmkshrobj libpython%{pybasever}m.a -o libpython%{pybasever}m.so -bE:libpython.exp -lm
-rm -f libpython.exp libpython%{pybasever}m.a
-${AR} -rv libpython%{pybasever}m.a libpython%{pybasever}m.so
-
 gmake %{?_smp_mflags}
 
 %install
