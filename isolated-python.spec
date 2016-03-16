@@ -74,7 +74,6 @@ export NM="nm -X32_64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-export LDFLAGS="-L%{_prefix}/lib64"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
