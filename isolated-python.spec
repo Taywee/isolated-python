@@ -106,6 +106,10 @@ gmake DESTDIR=%{buildroot} install
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
+ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.a
+ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
+cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
+
 find %{buildroot}%{_libdir64}/python%{pybasever} -type d | sed "s|%{buildroot}|%dir |" >> libfiles
 find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
   grep -v '_ctypes_test.so$' | \
@@ -115,9 +119,6 @@ find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
   sed 's|%{buildroot}||' >> libfiles
 
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
-cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config/
-ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.a
-ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.so
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
