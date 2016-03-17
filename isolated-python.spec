@@ -80,8 +80,8 @@ autoconf
     --prefix=%{pythonroot} \
     --libdir=%{_libdir64} \
     --mandir=%{_mandir} \
-    --with-gcc="$CC -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --with-cxx-main="$CXX -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-gcc="$CC -pthread -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-cxx-main="$CXX -pthread -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
     --enable-shared \
 %ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
     --disable-ipv6 \
