@@ -108,9 +108,11 @@ chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
 find %{buildroot}%{_libdir64}/python%{pybasever} -type d | sed "s|%{buildroot}|%dir |" >> libfiles
 find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
-  grep -v "_ctypes_test.so$" | \
-  grep -v "_testcapi.so$" | \
-  sed "s|%{buildroot}||" >> libfiles
+  grep -v '_ctypes_test.so$' | \
+  grep -v '_testcapi.so$' | \
+  grep -v 'launcher manifest.xml$' | \
+  grep -v '\(dev\)' | \
+  sed 's|%{buildroot}||' >> libfiles
 
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config/
