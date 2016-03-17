@@ -85,9 +85,6 @@ autoconf
 %else
     --enable-ipv6 \
 %endif
-    --with-threads \
-    --with-system-expat \
-    --with-system-ffi \
     OPT="-O2"
 
 gmake %{?_smp_mflags}
