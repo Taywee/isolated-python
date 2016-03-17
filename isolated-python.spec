@@ -110,6 +110,8 @@ find %{buildroot}%{_libdir64}/python%{pybasever}/lib-dynload -type f | \
   grep -v "_testcapi.so$" | \
   sed "s|%{buildroot}||" >> dynfiles
 
+ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
+cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config/
 ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.a
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config/libpython%{pybasever}m.so
 
