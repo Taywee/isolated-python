@@ -63,7 +63,6 @@ package.
 
 
 %prep
-export PATH=/opt/freeware/bin:$PATH
 %setup -q -n %{name}
 rm -rf Modules/expat Modules/zlib
 
