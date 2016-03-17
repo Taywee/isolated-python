@@ -123,8 +123,7 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %files -f dynfiles
 %defattr(-,root,system)
 %doc LICENSE README
-%{_bindir}/pydoc*
-%{_bindir}/python*
+%{_bindir}/*
 %{_mandir}/man?/*
 %dir %{_libdir64}/python%{pybasever}
 %{_libdir64}/python%{pybasever}/LICENSE.txt
@@ -177,8 +176,6 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 
 # Tools
 %defattr(-,root,system,-)
-%{_bindir}/2to3*
-%{_bindir}/idle*
 
 %changelog
 * Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
