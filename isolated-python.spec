@@ -43,7 +43,6 @@ BuildRequires: zlib-devel >= 1.2.3-3
 #%ifos aix6.1 || %ifos aix7.1
 #Requires: AIX-rpm >= 6.1.0.0
 #%endif
-Requires: AIX-rpm
 
 %description
 Python is an interpreted, interactive, object-oriented programming
@@ -162,8 +161,6 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %{_libdir64}/python%{pybasever}/unittest/*.py*
 %{_libdir64}/python%{pybasever}/wsgiref*
 %{_libdir64}/python%{pybasever}/xml
-%{_bindir}/pydoc*
-%{_bindir}/python*
 
 # Libs
 %{_libdir64}/libpython%{pybasever}m.a
