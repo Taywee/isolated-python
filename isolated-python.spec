@@ -74,14 +74,14 @@ export NM="nm -X32_64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-export LDFLAGS="-L%{_prefix}/lib64"
+export LDFLAGS="$LDFLAGS -L%{_prefix}/lib64 -pthread"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
     --libdir=%{_libdir64} \
     --mandir=%{_mandir} \
-    --with-gcc="$CC -pthread -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --with-cxx-main="$CXX -pthread -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-gcc="$CC -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-cxx-main="$CXX -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
     --enable-shared \
 %ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
     --disable-ipv6 \
