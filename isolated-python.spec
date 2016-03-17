@@ -19,6 +19,8 @@ Source0: %{name}-%{pybasever}.tar.gz
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
+# Needed to remove dependencies on /usr/local/bin/python
+Autoreq: 0
 BuildRequires: make
 
 BuildRequires: bzip2 >= 1.0.2-4
