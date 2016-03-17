@@ -106,11 +106,11 @@ gmake DESTDIR=%{buildroot} install
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
-find %{buildroot}%{_libdir64}/python%{pybasever}/lib-dynload -type d | sed "s|%{buildroot}|%dir |" >> dynfiles
-find %{buildroot}%{_libdir64}/python%{pybasever}/lib-dynload -type f | \
+find %{buildroot}%{_libdir64}/python%{pybasever} -type d | sed "s|%{buildroot}|%dir |" >> libfiles
+find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
   grep -v "_ctypes_test.so$" | \
   grep -v "_testcapi.so$" | \
-  sed "s|%{buildroot}||" >> dynfiles
+  sed "s|%{buildroot}||" >> libfiles
 
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config/
@@ -120,48 +120,11 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
-%files -f dynfiles
+%files -f libfiles
 %defattr(-,root,system)
 %doc LICENSE README
 %{_bindir}/*
 %{_mandir}/man?/*
-%dir %{_libdir64}/python%{pybasever}
-%{_libdir64}/python%{pybasever}/LICENSE.txt
-%dir %{_libdir64}/python%{pybasever}/site-packages
-%{_libdir64}/python%{pybasever}/site-packages/README
-%{_libdir64}/python%{pybasever}/*.py*
-%dir %{_libdir64}/python%{pybasever}/ctypes
-%{_libdir64}/python%{pybasever}/ctypes/*.py*
-%{_libdir64}/python%{pybasever}/ctypes/macholib
-%{_libdir64}/python%{pybasever}/curses
-%dir %{_libdir64}/python%{pybasever}/distutils
-%{_libdir64}/python%{pybasever}/distutils/*.py*
-%{_libdir64}/python%{pybasever}/distutils/README
-%{_libdir64}/python%{pybasever}/distutils/command
-%dir %{_libdir64}/python%{pybasever}/email
-%{_libdir64}/python%{pybasever}/email/*.py*
-%{_libdir64}/python%{pybasever}/email/mime
-%{_libdir64}/python%{pybasever}/encodings
-%{_libdir64}/python%{pybasever}/idlelib
-%{_libdir64}/python%{pybasever}/importlib
-%dir %{_libdir64}/python%{pybasever}/json
-%{_libdir64}/python%{pybasever}/json/*.py*
-%dir %{_libdir64}/python%{pybasever}/lib2to3
-%{_libdir64}/python%{pybasever}/lib2to3/*.py*
-%{_libdir64}/python%{pybasever}/lib2to3/Grammar*
-%{_libdir64}/python%{pybasever}/lib2to3/Pattern*
-%{_libdir64}/python%{pybasever}/lib2to3/fixes
-%{_libdir64}/python%{pybasever}/lib2to3/pgen2
-%{_libdir64}/python%{pybasever}/logging
-%{_libdir64}/python%{pybasever}/multiprocessing
-%{_libdir64}/python%{pybasever}/plat-aix?
-%{_libdir64}/python%{pybasever}/pydoc_data
-%dir %{_libdir64}/python%{pybasever}/sqlite3
-%{_libdir64}/python%{pybasever}/sqlite3/*.py*
-%dir %{_libdir64}/python%{pybasever}/unittest
-%{_libdir64}/python%{pybasever}/unittest/*.py*
-%{_libdir64}/python%{pybasever}/wsgiref*
-%{_libdir64}/python%{pybasever}/xml
 
 # Libs
 %{_libdir64}/libpython%{pybasever}m.a
