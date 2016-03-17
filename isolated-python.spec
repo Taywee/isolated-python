@@ -35,14 +35,15 @@ BuildRequires: tcl-devel >= 8.5.8-2
 BuildRequires: sqlite-devel >= 3.7.3-1
 BuildRequires: zlib-devel >= 1.2.3-3
 
-%ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
-Requires: AIX-rpm >= 5.1.0.0
-Requires: AIX-rpm < 5.4.0.0
-%endif
-
-%ifos aix6.1 || %ifos aix7.1
-Requires: AIX-rpm >= 6.1.0.0
-%endif
+#%ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
+#Requires: AIX-rpm >= 5.1.0.0
+#Requires: AIX-rpm < 5.4.0.0
+#%endif
+#
+#%ifos aix6.1 || %ifos aix7.1
+#Requires: AIX-rpm >= 6.1.0.0
+#%endif
+Requires: AIX-rpm
 
 %description
 Python is an interpreted, interactive, object-oriented programming
@@ -129,10 +130,6 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %dir %{_libdir64}/python%{pybasever}/site-packages
 %{_libdir64}/python%{pybasever}/site-packages/README
 %{_libdir64}/python%{pybasever}/*.py*
-%{_libdir64}/python%{pybasever}/*.doc
-%dir %{_libdir64}/python%{pybasever}/bsddb
-%{_libdir64}/python%{pybasever}/bsddb/*.py*
-%{_libdir64}/python%{pybasever}/compiler
 %dir %{_libdir64}/python%{pybasever}/ctypes
 %{_libdir64}/python%{pybasever}/ctypes/*.py*
 %{_libdir64}/python%{pybasever}/ctypes/macholib
@@ -145,7 +142,6 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %{_libdir64}/python%{pybasever}/email/*.py*
 %{_libdir64}/python%{pybasever}/email/mime
 %{_libdir64}/python%{pybasever}/encodings
-%{_libdir64}/python%{pybasever}/hotshot
 %{_libdir64}/python%{pybasever}/idlelib
 %{_libdir64}/python%{pybasever}/importlib
 %dir %{_libdir64}/python%{pybasever}/json
@@ -184,7 +180,6 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 %defattr(-,root,system,-)
 %{_bindir}/2to3*
 %{_bindir}/idle*
-%{_bindir}/smtpd*.py*
 
 %changelog
 * Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
