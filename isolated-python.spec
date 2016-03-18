@@ -65,7 +65,7 @@ package.
 
 
 %prep
-%setup -q -n %{name}
+%setup -q -n %{name}-%{pybasever}
 rm -rf Modules/expat Modules/zlib
 
 %build
