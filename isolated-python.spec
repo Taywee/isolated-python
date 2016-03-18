@@ -120,8 +120,8 @@ ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
 
-ls -1 %{buildroot}%{_libdir64}/*.a >> libfiles
-ls -1 %{buildroot}%{_libdir64}/*.so >> libfiles
+ls -1 %{buildroot}%{_libdir64}/*.a | sed 's|%{buildroot}||' >> libfiles
+ls -1 %{buildroot}%{_libdir64}/*.so | sed 's|%{buildroot}||' >> libfiles
 find %{buildroot}%{_libdir64}/python%{pybasever} -type d | sed "s|%{buildroot}|%dir |" >> libfiles
 find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
   grep -v '_ctypes_test.so$' | \
