@@ -4,8 +4,6 @@
 
 /* Include nearly all Python header files */
 
-
-
 #include "patchlevel.h"
 #include "pyconfig.h"
 #include "pymacconfig.h"
@@ -34,8 +32,6 @@
 #include <errno.h>
 #endif
 #include <stdlib.h>
-/* rpl_malloc hack */
-extern void* rpl_malloc (size_t n);
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -135,7 +131,5 @@ extern void* rpl_malloc (size_t n);
 #include "dtoa.h"
 #include "fileutils.h"
 #include "pyfpe.h"
-
-
 
 #endif /* !Py_PYTHON_H */
