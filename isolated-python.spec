@@ -112,7 +112,7 @@ rpm -ql $packages | grep -E '/opt/freeware/lib64/.*\.so' | sort | uniq | while r
     cp "$so" %{buildroot}%{_libdir64}
 done
 
-rpm -ql $packages | rep -E '/opt/freeware/lib/.*\.a' | sort | uniq | while read a; do
+rpm -ql $packages | grep -E '/opt/freeware/lib/.*\.a' | sort | uniq | while read a; do
     cp "$a" %{buildroot}%{_libdir64}
 done
 
