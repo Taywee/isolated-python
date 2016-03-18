@@ -106,6 +106,16 @@ gmake DESTDIR=%{buildroot} install
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
+# Copy dependent libraries
+packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline ncurses tcl sqlite zlib"
+rpm -ql $packages | grep -E '/opt/freeware/lib64/.*\.so' | sort | uniq | while read so; do
+    cp "$so" %{buildroot}%{_libdir64}
+done
+
+rpm -ql $packages | rep -E '/opt/freeware/lib/.*\.a' | sort | uniq | while read a; do
+    cp "$a" %{buildroot}%{_libdir64}
+done
+
 ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.a
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
