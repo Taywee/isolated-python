@@ -4746,3 +4746,12 @@ PyAST_Compile(mod_ty mod, const char *filename, PyCompilerFlags *flags,
     return PyAST_CompileEx(mod, filename, flags, -1, arena);
 }
 
+/* rpl_malloc hack */
+void* rpl_malloc (size_t n)
+{
+    if (n == 0)
+    {
+        n = 1;
+    }
+    return malloc (n);
+}
