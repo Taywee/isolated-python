@@ -75,7 +75,7 @@ export NM="nm -X32_64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-export LDFLAGS="$LDFLAGS -L%{_prefix}/lib64 -pthread -Wl,-blibpath:%{_libdir64}"
+export LDFLAGS="$LDFLAGS -L%{_prefix}/lib64 -pthread -Wl,-blibpath:%{_libdir64}:/opt/freeware/lib64:/opt/freeware/lib:/usr/lib:/lib"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
