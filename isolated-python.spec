@@ -141,10 +141,6 @@ ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 %{_bindir}/*
 %{_mandir}/man?/*
 
-# Libs
-%{_libdir64}/libpython%{pybasever}m.a
-%{_libdir64}/libpython%{pybasever}m.so
-
 # Devel
 %doc Misc/README.valgrind Misc/valgrind-python.supp
 %doc Misc/gdbinit
