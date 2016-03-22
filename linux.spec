@@ -15,7 +15,7 @@ Release: 0
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
-Source0: %{name}-%{pybasever}.tar.gz
+Source: https://github.com/Taywee/%{name}/archive/%{pybasever}.tar.gz
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
