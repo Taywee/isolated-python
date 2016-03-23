@@ -425,7 +425,7 @@ rm -rf %{buildroot}
 %dir %{pylibdir}/Doc/tools/static
 %dir %{pylibdir}/Doc/tools/templates
 %dir %{pylibdir}/Doc/tools/__pycache__
-%dir %{libroot}/pkgconfig
+%dir %{libdir}/pkgconfig
 %dir %{pyroot}/include
 %dir %{pyroot}/include/python3.5m
 %dir %{pyroot}/share
