@@ -27,14 +27,12 @@ Source: https://github.com/Taywee/%{name}/archive/%{pybasever}.tar.gz
 BuildRequires: autoconf
 BuildRequires: bzip2
 BuildRequires: bzip2-devel
-BuildRequires: db4-devel >= 4.7
+BuildRequires: libdb-devel
 BuildRequires: expat-devel >= 2.1.0
 BuildRequires: gdbm-devel
 BuildRequires: glibc-devel
 BuildRequires: gmp-devel
 BuildRequires: libffi-devel
-BuildRequires: libGL-devel
-BuildRequires: libX11-devel
 BuildRequires: ncurses-devel
 BuildRequires: net-tools
 BuildRequires: openssl-devel
@@ -597,6 +595,6 @@ rm -rf %{buildroot}
 %{pymandir}/man1/*
 
 %changelog
-* Tue Mar 23 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
+* Wed Mar 23 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
 - started development on the present version.  Will be bumped to release 1 when
   compiles and installs properly.
