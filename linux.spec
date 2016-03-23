@@ -4,10 +4,15 @@
 %global pyshortver 35
 %global pyroot /opt/isolated-python
 %global pybindir %{pyroot}/bin
+%global pysbindir %{pyroot}/sbin
 %global libdir %{pyroot}/lib
 %global pylibdir %{libdir}/python%{pybasever}
 %global dynload_dir %{pylibdir}/lib-dynload
-%global pymandir %{pyroot}/share/man
+%global pydatadir %{pyroot}/share
+%global pymandir %{pydatadir}/man
+%global pyinfodir %{pydatadir}/info
+%global pyincludedir %{pyroot}/include
+%global pylibexecdir %{pyroot}/libexec
 %global abiflags m
 %global ldversion %{pybasever}%{abiflags}
 
@@ -88,9 +93,16 @@ SymlinkName=python%{pybasever}
 PathFixWithThisBinary=true
 
 %configure \
-  --prefix=%{pyroot} \
+  --bindir=%{pybindir} \
+  --datadir=%{pydatadir} \
+  --exec-prefix=%{pyroot} \
+  --includedir=%{pyincludedir} \
+  --infodir=%{pyinfodir} \
   --libdir=%{libdir} \
+  --libexecdir=%{pylibexecdir} \
   --mandir=%{pymandir} \
+  --prefix=%{pyroot} \
+  --sbindir=%{pysbindir} \
   --enable-ipv6 \
   --enable-shared \
   --with-computed-gotos=%{with_computed_gotos} \
