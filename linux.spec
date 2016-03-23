@@ -136,7 +136,7 @@ rm -f %{buildroot}%{pylibdir}/email/test/data/audiotest.au %{buildroot}%{pylibdi
 # Switch all shebangs to refer to the specific Python version.
 LD_LIBRARY_PATH=%{buildroot}%{libdir} %{buildroot}%{pybindir}/python%{pybasever} \
   Tools/scripts/pathfix.py \
-  -i "%{buildroot}%{pybindir}/python%{pybasever}" \
+  -i "%{pybindir}/python%{pybasever}" \
   %{buildroot}
 
 # Remove shebang lines from .py files that aren't executable, and
