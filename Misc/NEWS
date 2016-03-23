@@ -10,6 +10,9 @@ Release date: tba
 Core and Builtins
 -----------------
 
+- Issue #26581: If coding cookie is specified multiple times on a line in
+  Python source code file, only the first one is taken to account.
+
 - Issue #26464: Fix str.translate() when string is ASCII and first replacements
   removes character, but next replacement uses a non-ASCII character or a
   string longer than 1 character. Regression introduced in Python 3.5.0.
@@ -90,6 +93,22 @@ Core and Builtins
 
 Library
 -------
+
+- Issue #24266: Ctrl+C during Readline history search now cancels the search
+  mode when compiled with Readline 7.
+
+- Issue #26560: Avoid potential ValueError in BaseHandler.start_response.
+  Initial patch by Peter Inglesby.
+
+- Issue #26313: ssl.py _load_windows_store_certs fails if windows cert store
+  is empty. Patch by Baji.
+
+- Issue #26569: Fix :func:`pyclbr.readmodule` and :func:`pyclbr.readmodule_ex`
+  to support importing packages.
+
+- Issue #26499: Account for remaining Content-Length in
+  HTTPResponse.readline() and read1().  Based on patch by Silent Ghost.
+  Also document that HTTPResponse now supports these methods.
 
 - Issue #25320: Handle sockets in directories unittest discovery is scanning.
   Patch from Victor van den Elzen.
@@ -312,8 +331,14 @@ Tests
 - Issue #25616: Tests for OrderedDict are extracted from test_collections
   into separate file test_ordered_dict.
 
+- Issue #26583: Skip test_timestamp_overflow in test_import if bytecode
+  files cannot be written.
+
 Build
 -----
+
+- Issue #17603: Avoid error about nonexistant fileblocks.o file by using a
+  lower-level check for st_blocks in struct stat.
 
 - Issue #26079: Fixing the build output folder for tix-8.4.3.6. Patch by
   Bjoern Thiel.
@@ -362,6 +387,9 @@ Windows
 
 Tools/Demos
 -----------
+
+- Issue #26271: Fix the Freeze tool to properly use flags passed through
+  configure. Patch by Daniel Shaulov.
 
 - Issue #26489: Add dictionary unpacking support to Tools/parser/unparse.py.
   Patch by Guo Ci Teo.
