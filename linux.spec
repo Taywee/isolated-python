@@ -134,7 +134,7 @@ cp -ar Tools/demo %{buildroot}%{pylibdir}/Tools/
 rm -f %{buildroot}%{pylibdir}/email/test/data/audiotest.au %{buildroot}%{pylibdir}/test/audiotest.au
 
 # Switch all shebangs to refer to the specific Python version.
-LD_LIBRARY_PATH=%{buildroot}%{pylibdir} %{buildroot}%{pybindir}/python%{pybasever} \
+LD_LIBRARY_PATH=%{buildroot}%{libdir} %{buildroot}%{pybindir}/python%{pybasever} \
   Tools/scripts/pathfix.py \
   -i "%{buildroot}%{pybindir}/python%{pybasever}" \
   %{buildroot}
