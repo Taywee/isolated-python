@@ -187,6 +187,9 @@ find %{buildroot} -type f -a -name "*.py" -print0 | \
     PYTHONPATH="%{buildroot}%{pylibdir} %{buildroot}%{pylibdir}/site-packages" \
     xargs -0 %{buildroot}%{pybindir}/python%{pybasever} -O -c 'import py_compile, sys; [py_compile.compile(f, dfile=f.partition("%{buildroot}")[2], optimize=0) for f in sys.argv[1:]]' || :
 
+# Remove all references to the buildroot, just for good measure
+find %{buildroot} -type f -exec sed -i 's|%{buildroot}||' {} \;
+
 %clean
 rm -rf %{buildroot}
 
