@@ -101,7 +101,7 @@ Some facts and figures:
 
    For modes ``'w:gz'``, ``'r:gz'``, ``'w:bz2'``, ``'r:bz2'``, ``'x:gz'``,
    ``'x:bz2'``, :func:`tarfile.open` accepts the keyword argument
-   *compresslevel* to specify the compression level of the file.
+   *compresslevel* (default ``9``) to specify the compression level of the file.
 
    For special purposes, there is a second format for *mode*:
    ``'filemode|[compression]'``.  :func:`tarfile.open` will return a :class:`TarFile`
@@ -129,7 +129,7 @@ Some facts and figures:
    | ``'r|bz2'`` | Open a bzip2 compressed *stream* for       |
    |             | reading.                                   |
    +-------------+--------------------------------------------+
-   | ``'r|xz'``  | Open a lzma compressed *stream* for        |
+   | ``'r|xz'``  | Open an lzma compressed *stream* for       |
    |             | reading.                                   |
    +-------------+--------------------------------------------+
    | ``'w|'``    | Open an uncompressed *stream* for writing. |
@@ -238,7 +238,7 @@ details.
       Documentation of the higher-level archiving facilities provided by the
       standard :mod:`shutil` module.
 
-   `GNU tar manual, Basic Tar Format <http://www.gnu.org/software/tar/manual/html_node/Standard.html>`_
+   `GNU tar manual, Basic Tar Format <https://www.gnu.org/software/tar/manual/html_node/Standard.html>`_
       Documentation for tar archive files, including GNU tar extensions.
 
 

@@ -675,7 +675,7 @@ Py_LOCAL_INLINE(Py_ssize_t) findchar(const void *s, int kind,
 }
 
 #ifdef Py_DEBUG
-/* Fill the data of an Unicode string with invalid characters to detect bugs
+/* Fill the data of a Unicode string with invalid characters to detect bugs
    earlier.
 
    _PyUnicode_CheckConsistency(str, 1) detects invalid characters, at least for
@@ -15149,8 +15149,8 @@ unicodeiter_next(unicodeiterobject *it)
         return item;
     }
 
-    Py_DECREF(seq);
     it->it_seq = NULL;
+    Py_DECREF(seq);
     return NULL;
 }
 

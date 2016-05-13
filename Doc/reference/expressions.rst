@@ -378,14 +378,14 @@ on the right hand side of an assignment statement.
 
 .. seealso::
 
-   :pep:`0255` - Simple Generators
+   :pep:`255` - Simple Generators
       The proposal for adding generators and the :keyword:`yield` statement to Python.
 
-   :pep:`0342` - Coroutines via Enhanced Generators
+   :pep:`342` - Coroutines via Enhanced Generators
       The proposal to enhance the API and syntax of generators, making them
       usable as simple coroutines.
 
-   :pep:`0380` - Syntax for Delegating to a Subgenerator
+   :pep:`380` - Syntax for Delegating to a Subgenerator
       The proposal to introduce the :token:`yield_from` syntax, making delegation
       to sub-generators easy.
 
@@ -728,7 +728,7 @@ A consequence of this is that although the ``*expression`` syntax may appear
 (and the ``**expression`` argument, if any -- see below).  So::
 
    >>> def f(a, b):
-   ...  print(a, b)
+   ...     print(a, b)
    ...
    >>> f(b=1, *(2,))
    2 1
@@ -821,7 +821,7 @@ Suspend the execution of :term:`coroutine` on an :term:`awaitable` object.
 Can only be used inside a :term:`coroutine function`.
 
 .. productionlist::
-   await: ["await"] `primary`
+   await_expr: "await" `primary`
 
 .. versionadded:: 3.5
 
@@ -835,7 +835,7 @@ The power operator binds more tightly than unary operators on its left; it binds
 less tightly than unary operators on its right.  The syntax is:
 
 .. productionlist::
-   power: `await` ["**" `u_expr`]
+   power: ( `await_expr` | `primary` ) ["**" `u_expr`]
 
 Thus, in an unparenthesized sequence of power and unary operators, the operators
 are evaluated from right to left (this does not constrain the evaluation order

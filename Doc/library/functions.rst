@@ -158,7 +158,7 @@ are always available.  They are listed here in alphabetical order.
 
    Return the string representing a character whose Unicode code point is the
    integer *i*.  For example, ``chr(97)`` returns the string ``'a'``, while
-   ``chr(957)`` returns the string ``'ν'``. This is the inverse of :func:`ord`.
+   ``chr(8364)`` returns the string ``'€'``. This is the inverse of :func:`ord`.
 
    The valid range for the argument is from 0 through 1,114,111 (0x10FFFF in
    base 16).  :exc:`ValueError` will be raised if *i* is outside that range.
@@ -1074,6 +1074,8 @@ are always available.  They are listed here in alphabetical order.
       exception, the function now retries the system call instead of raising an
       :exc:`InterruptedError` exception (see :pep:`475` for the rationale).
 
+   .. versionchanged:: 3.5
+      The ``'namereplace'`` error handler was added.
 
 .. function:: ord(c)
 

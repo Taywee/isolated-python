@@ -6,6 +6,8 @@
 
 **Source code:** :source:`Lib/typing.py`
 
+.. versionadded:: 3.5
+
 --------------
 
 This module supports type hints as specified by :pep:`484`.  The most
@@ -429,9 +431,9 @@ The module defines the following classes, functions and decorators:
       def slice__to_4(vector: Sequence[T]) -> List[T]:
           return vector[0:4]
 
-.. class:: AbstractSet(set, MutableSet[T])
+.. class:: Set(set, MutableSet[T])
 
-   A generic version of :class:`collections.abc.Set`.
+   A generic version of :class:`builtins.set <set>`.
 
 .. class:: MappingView(Sized, Iterable[T_co])
 

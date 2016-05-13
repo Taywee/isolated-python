@@ -1753,11 +1753,11 @@ to remember the order that class variables are defined::
 
     class OrderedClass(type):
 
-         @classmethod
-         def __prepare__(metacls, name, bases, **kwds):
+        @classmethod
+        def __prepare__(metacls, name, bases, **kwds):
             return collections.OrderedDict()
 
-         def __new__(cls, name, bases, namespace, **kwds):
+        def __new__(cls, name, bases, namespace, **kwds):
             result = type.__new__(cls, name, bases, dict(namespace))
             result.members = tuple(namespace)
             return result
@@ -2188,7 +2188,7 @@ For more information on context managers, see :ref:`typecontextmanager`.
 
 .. seealso::
 
-   :pep:`0343` - The "with" statement
+   :pep:`343` - The "with" statement
       The specification, background, and examples for the Python :keyword:`with`
       statement.
 

@@ -200,7 +200,7 @@ class _BasePurePathTest(object):
 
     def _check_str_subclass(self, *args):
         # Issue #21127: it should be possible to construct a PurePath object
-        # from an str subclass instance, and it then gets converted to
+        # from a str subclass instance, and it then gets converted to
         # a pure str object.
         class StrSubclass(str):
             pass
@@ -2062,7 +2062,7 @@ class PosixPathTest(_BasePathTest, unittest.TestCase):
         import pwd
         pwdent = pwd.getpwuid(os.getuid())
         username = pwdent.pw_name
-        userhome = pwdent.pw_dir.rstrip('/')
+        userhome = pwdent.pw_dir.rstrip('/') or '/'
         # find arbitrary different user (if exists)
         for pwdent in pwd.getpwall():
             othername = pwdent.pw_name

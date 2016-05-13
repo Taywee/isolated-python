@@ -504,6 +504,27 @@ class ProcessTestCase(BaseTestCase):
         tf.seek(0)
         self.assertStderrEqual(tf.read(), b"strawberry")
 
+    def test_stderr_redirect_with_no_stdout_redirect(self):
+        # test stderr=STDOUT while stdout=None (not set)
+
+        # - grandchild prints to stderr
+        # - child redirects grandchild's stderr to its stdout
+        # - the parent should get grandchild's stderr in child's stdout
+        p = subprocess.Popen([sys.executable, "-c",
+                              'import sys, subprocess;'
+                              'rc = subprocess.call([sys.executable, "-c",'
+                              '    "import sys;"'
+                              '    "sys.stderr.write(\'42\')"],'
+                              '    stderr=subprocess.STDOUT);'
+                              'sys.exit(rc)'],
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+        #NOTE: stdout should get stderr from grandchild
+        self.assertStderrEqual(stdout, b'42')
+        self.assertStderrEqual(stderr, b'') # should be empty
+        self.assertEqual(p.returncode, 0)
+
     def test_stdout_stderr_pipe(self):
         # capture stdout and stderr to the same pipe
         p = subprocess.Popen([sys.executable, "-c",
@@ -2518,7 +2539,7 @@ class Win32ProcessTestCase(BaseTestCase):
     def test_terminate_dead(self):
         self._kill_dead_process('terminate')
 
-class CommandTests(unittest.TestCase):
+class MiscTests(unittest.TestCase):
     def test_getoutput(self):
         self.assertEqual(subprocess.getoutput('echo xyzzy'), 'xyzzy')
         self.assertEqual(subprocess.getstatusoutput('echo xyzzy'),
@@ -2538,6 +2559,21 @@ class CommandTests(unittest.TestCase):
             if dir is not None:
                 os.rmdir(dir)
 
+    def test__all__(self):
+        """Ensure that __all__ is populated properly."""
+        # STARTUPINFO added to __all__ in 3.6
+        intentionally_excluded = {"list2cmdline", "STARTUPINFO", "Handle"}
+        exported = set(subprocess.__all__)
+        possible_exports = set()
+        import types
+        for name, value in subprocess.__dict__.items():
+            if name.startswith('_'):
+                continue
+            if isinstance(value, (types.ModuleType,)):
+                continue
+            possible_exports.add(name)
+        self.assertEqual(exported, possible_exports - intentionally_excluded)
+
 
 @unittest.skipUnless(hasattr(selectors, 'PollSelector'),
                      "Test needs selectors.PollSelector")
@@ -2550,21 +2586,6 @@ class ProcessTestCaseNoPoll(ProcessTestCase):
     def tearDown(self):
         subprocess._PopenSelector = self.orig_selector
         ProcessTestCase.tearDown(self)
-
-    def test__all__(self):
-        """Ensure that __all__ is populated properly."""
-        intentionally_excluded = set(("list2cmdline",))
-        exported = set(subprocess.__all__)
-        possible_exports = set()
-        import types
-        for name, value in subprocess.__dict__.items():
-            if name.startswith('_'):
-                continue
-            if isinstance(value, (types.ModuleType,)):
-                continue
-            possible_exports.add(name)
-        self.assertEqual(exported, possible_exports - intentionally_excluded)
-
 
 
 @unittest.skipUnless(mswindows, "Windows-specific tests")
@@ -2669,7 +2690,7 @@ def test_main():
     unit_tests = (ProcessTestCase,
                   POSIXProcessTestCase,
                   Win32ProcessTestCase,
-                  CommandTests,
+                  MiscTests,
                   ProcessTestCaseNoPoll,
                   CommandsWithSpaces,
                   ContextManagerTests,

@@ -67,7 +67,7 @@ The :mod:`urllib.request` module defines the following functions:
 
    * :meth:`~urllib.response.addinfourl.info` --- return the meta-information of the page, such as headers,
      in the form of an :func:`email.message_from_string` instance (see
-     `Quick Reference to HTTP Headers <http://www.cs.tut.fi/~jkorpela/http.html>`_)
+     `Quick Reference to HTTP Headers <https://www.cs.tut.fi/~jkorpela/http.html>`_)
 
    * :meth:`~urllib.response.addinfourl.getcode` -- return the HTTP status code of the response.
 
@@ -166,6 +166,8 @@ The :mod:`urllib.request` module defines the following functions:
    in a case insensitive approach, for all operating systems first, and when it
    cannot find it, looks for proxy information from Mac OSX System
    Configuration for Mac OS X and Windows Systems Registry for Windows.
+   If both lowercase and uppercase environment variables exist (and disagree),
+   lowercase is preferred.
 
 
 The following classes are provided:
@@ -268,6 +270,11 @@ The following classes are provided:
    is retrieved from the OS X System Configuration Framework.
 
    To disable autodetected proxy pass an empty dictionary.
+
+   The :envvar:`no_proxy` environment variable can be used to specify hosts
+   which shouldn't be reached via proxy; if set, it should be a comma-separated
+   list of hostname suffixes, optionally with ``:port`` appended, for example
+   ``cern.ch,ncsa.uiuc.edu,some.host:8080``.
 
 
 .. class:: HTTPPasswordMgr()
@@ -1123,7 +1130,7 @@ it receives from the http server. In general, a program will decode
 the returned bytes object to string once it determines or guesses
 the appropriate encoding.
 
-The following W3C document, http://www.w3.org/International/O-charset\ , lists
+The following W3C document, https://www.w3.org/International/O-charset\ , lists
 the various ways in which a (X)HTML or a XML document could have specified its
 encoding information.
 
@@ -1167,7 +1174,7 @@ The code for the sample CGI used in the above example is::
 Here is an example of doing a ``PUT`` request using :class:`Request`::
 
     import urllib.request
-    DATA=b'some data'
+    DATA = b'some data'
     req = urllib.request.Request(url='http://localhost:8080', data=DATA,method='PUT')
     with urllib.request.urlopen(req) as f:
         pass

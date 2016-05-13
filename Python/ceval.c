@@ -4426,7 +4426,7 @@ _PyEval_SetCoroutineWrapper(PyObject *wrapper)
     PyThreadState *tstate = PyThreadState_GET();
 
     Py_XINCREF(wrapper);
-    Py_SETREF(tstate->coroutine_wrapper, wrapper);
+    Py_XSETREF(tstate->coroutine_wrapper, wrapper);
 }
 
 PyObject *

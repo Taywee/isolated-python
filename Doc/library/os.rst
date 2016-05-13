@@ -1624,8 +1624,8 @@ features:
    Create a directory named *path* with numeric mode *mode*.
 
    On some systems, *mode* is ignored.  Where it is used, the current umask
-   value is first masked out.  If the directory already exists, :exc:`OSError`
-   is raised.
+   value is first masked out.  If the directory already exists,
+   :exc:`FileExistsError` is raised.
 
    This function can also support :ref:`paths relative to directory descriptors
    <dir_fd>`.
@@ -1762,7 +1762,7 @@ features:
    ``os.path.join(os.path.dirname(path), result)``.
 
    If the *path* is a string object, the result will also be a string object,
-   and the call may raise an UnicodeDecodeError. If the *path* is a bytes
+   and the call may raise a UnicodeDecodeError. If the *path* is a bytes
    object, the result will be a bytes object.
 
    This function can also support :ref:`paths relative to directory descriptors

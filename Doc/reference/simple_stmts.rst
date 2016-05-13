@@ -237,7 +237,7 @@ Assignment of an object to a single target is recursively defined as follows.
    phase, causing less detailed error messages.
 
 Although the definition of assignment implies that overlaps between the
-left-hand side and the right-hand side are 'simultanenous' (for example ``a, b =
+left-hand side and the right-hand side are 'simultaneous' (for example ``a, b =
 b, a`` swaps two variables), overlaps *within* the collection of assigned-to
 variables occur left-to-right, sometimes resulting in confusion.  For instance,
 the following program prints ``[0, 2]``::
@@ -331,12 +331,12 @@ program:
 The simple form, ``assert expression``, is equivalent to ::
 
    if __debug__:
-      if not expression: raise AssertionError
+       if not expression: raise AssertionError
 
 The extended form, ``assert expression1, expression2``, is equivalent to ::
 
    if __debug__:
-      if not expression1: raise AssertionError(expression2)
+       if not expression1: raise AssertionError(expression2)
 
 .. index::
    single: __debug__
