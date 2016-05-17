@@ -628,6 +628,7 @@ class BaseEventLoopTests(test_utils.TestCase):
             fut.add_done_callback(lambda *args: self.loop.stop())
             self.loop.run_forever()
             fut = None # Trigger Future.__del__ or futures._TracebackLogger
+            support.gc_collect()
             if PY34:
                 # Future.__del__ in Python 3.4 logs error with
                 # an actual exception context
@@ -657,8 +658,10 @@ class BaseEventLoopTests(test_utils.TestCase):
         self.loop.set_debug(True)
         self.loop._process_events = mock.Mock()
 
+        self.assertIsNone(self.loop.get_exception_handler())
         mock_handler = mock.Mock()
         self.loop.set_exception_handler(mock_handler)
+        self.assertIs(self.loop.get_exception_handler(), mock_handler)
         handle = run_loop()
         mock_handler.assert_called_with(self.loop, {
             'exception': MOCK_ANY,
