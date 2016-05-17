@@ -53,7 +53,7 @@ BuildRequires: autoconf
 BuildRequires: bzip2
 BuildRequires: bzip2-devel
 BuildRequires: libdb-devel
-BuildRequires: expat-devel >= 2.1.0
+BuildRequires: expat-devel
 BuildRequires: gdbm-devel
 BuildRequires: glibc-devel
 BuildRequires: gmp-devel
@@ -70,7 +70,7 @@ BuildRequires: zlib-devel
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
-Requires: expat >= 2.1.0
+Requires: expat
 
 %description
 Python is an interpreted, interactive, object-oriented programming
