@@ -103,7 +103,7 @@ gmake DESTDIR=%{buildroot} install
 
 /usr/bin/strip -X64 %{buildroot}%{_bindir}/* || :
 
-find %{buildroot}%{_libdir64} -name '*.py' | xargs {buildroot}%{_bindir}/python3 -mpy_compile
+find %{buildroot}%{_libdir64} -name '*.py' | xargs %{buildroot}%{_bindir}/python3 -mpy_compile
 
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
