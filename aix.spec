@@ -1,7 +1,7 @@
 # Do not make other RPMs that depend on this one
 
 %define pybasever 3.5
-%define pythonroot /opt/isolated-python
+%define pythonroot /opt/ea-python
 
 %define _libdir64 %{pythonroot}/lib
 %define _includedir %{pythonroot}/include
@@ -9,9 +9,9 @@
 %define _mandir %{pythonroot}/share/man
 
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pythonroot}
-Name: isolated-python
+Name: ea-python
 Version: 3.5.1
-Release: 0
+Release: 1
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -101,13 +101,15 @@ gmake %{?_smp_mflags}
 export OBJECT_MODE=64
 gmake DESTDIR=%{buildroot} install
 
-/usr/bin/strip -X32_64 %{buildroot}%{_bindir}/* || :
+/usr/bin/strip -X64 %{buildroot}%{_bindir}/* || :
+
+find %{buildroot}%{_libdir64} -name '*.py' | xargs {buildroot}%{_bindir}/python3 -mpy_compile
 
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
 # Copy dependent libraries
-packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline ncurses tcl sqlite zlib"
+packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline tcl sqlite zlib"
 rpm -ql $packages | grep -E '/opt/freeware/lib64/.*\.so' | sort | uniq | while read so; do
     cp "$so" %{buildroot}%{_libdir64}
 done
@@ -119,39 +121,24 @@ done
 ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.a
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
-
-ls -1 %{buildroot}%{_libdir64}/*.a | sed 's|%{buildroot}||' >> libfiles
-ls -1 %{buildroot}%{_libdir64}/*.so | sed 's|%{buildroot}||' >> libfiles
-find %{buildroot}%{_libdir64}/python%{pybasever} -type d | sed "s|%{buildroot}|%dir |" >> libfiles
-find %{buildroot}%{_libdir64}/python%{pybasever} -type f | \
-  grep -v '_ctypes_test.so$' | \
-  grep -v '_testcapi.so$' | \
-  grep -v 'launcher manifest.xml$' | \
-  grep -v '\(dev\)' | \
-  sed 's|%{buildroot}||' >> libfiles
-
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
+
+find %{buildroot} -type d | sed "s|%{buildroot}|%dir |" >> allfiles
+find %{buildroot} -type f | sed "s|%{buildroot}||" >> allfiles
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
-%files -f libfiles
+%files -f allfiles
 %defattr(-,root,system)
 %doc LICENSE README
-%{_bindir}/*
-%{_mandir}/man?/*
-
-# Devel
 %doc Misc/README.valgrind Misc/valgrind-python.supp
 %doc Misc/gdbinit
-%{_includedir}/*
-%{_libdir64}/pkgconfig/*
-%{_libdir64}/python%{pybasever}/config
-
-# Tools
-%defattr(-,root,system,-)
 
 %changelog
+* Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-1
+- Should work.  Used auto-finding of files instead of more painful manual specification
+
 * Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
 - started development on the present version.  Will be bumped to release 1 when
   compiles and installs properly.
