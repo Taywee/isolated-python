@@ -11,7 +11,7 @@
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pythonroot}
 Name: ea-python
 Version: 3.5.1
-Release: 1
+Release: 2
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -125,10 +125,10 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 
-# Do not take blank lines
-find %{buildroot} -type d | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' >> allfiles
+# Do not take blank lines or test files
+find %{buildroot} -type d | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' >> allfiles
 # Do not take files with whitespace
-find %{buildroot} -type f | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
+find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -140,7 +140,10 @@ find %{buildroot} -type f | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
 %doc Misc/gdbinit
 
 %changelog
-* Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-1
+* Thu May 19 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-2
+- Trim out huge test files
+
+* Wed May 18 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-1
 - Should work.  Used auto-finding of files instead of more painful manual specification
 
 * Tue Mar 15 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
