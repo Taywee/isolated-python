@@ -125,8 +125,10 @@ ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybaseve
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 
-find %{buildroot} -type d | sed "s|%{buildroot}|%dir |" >> allfiles
-find %{buildroot} -type f | sed "s|%{buildroot}||" >> allfiles
+# Do not take blank lines
+find %{buildroot} -type d | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' >> allfiles
+# Do not take files with whitespace
+find %{buildroot} -type f | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
