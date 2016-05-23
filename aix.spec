@@ -126,7 +126,7 @@ cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 
 # Do not take blank lines or test files
-find %{buildroot} -type d | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' >> allfiles
+find %{buildroot} -type d | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' > allfiles
 # Do not take files with whitespace
 find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
 
