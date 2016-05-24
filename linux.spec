@@ -2,7 +2,7 @@
 
 %global pybasever 3.5
 %global pyshortver 35
-%global pyroot /opt/isolated-python
+%global pyroot /opt/ea-python
 %global pybindir %{pyroot}/bin
 %global pysbindir %{pyroot}/sbin
 %global libdir %{pyroot}/lib
@@ -33,16 +33,15 @@
 %global __os_install_post /usr/lib/rpm/brp-compress \
   %{!?__debug_package:/usr/lib/rpm/brp-strip %{__strip}} \
   /usr/lib/rpm/brp-strip-static-archive %{__strip} \
-  /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump} \
-  /usr/lib/rpm/brp-python-hardlink 
+  /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump}
 # to remove the invocation of brp-python-bytecompile, whilst keeping the
 # invocation of brp-python-hardlink (since this should still work for python3
 # pyc/pyo files)
 
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pyroot}
-Name: isolated-python
+Name: ea-python
 Version: 3.5.1
-Release: 0
+Release: 1
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -52,7 +51,6 @@ Source: https://github.com/Taywee/%{name}/archive/%{pybasever}.tar.gz
 BuildRequires: autoconf
 BuildRequires: bzip2
 BuildRequires: bzip2-devel
-BuildRequires: libdb-devel
 BuildRequires: expat-devel
 BuildRequires: gdbm-devel
 BuildRequires: glibc-devel
@@ -70,7 +68,20 @@ BuildRequires: zlib-devel
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
+Requires: bzip2
 Requires: expat
+Requires: gdbm
+Requires: glibc
+Requires: gmp
+Requires: libffi
+Requires: ncurses
+Requires: net-tools
+Requires: openssl
+Requires: readline
+Requires: sqlite
+Requires: tar
+Requires: xz
+Requires: zlib
 
 %description
 Python is an interpreted, interactive, object-oriented programming
@@ -90,7 +101,7 @@ Note that documentation for Python is provided in the python-docs
 package.
 
 %prep
-%setup -q -n %{name}-%{pybasever}
+%setup -q -n %{name}
 sed --in-place \
     --expression="s|http://docs.python.org/library|http://docs.python.org/%{pybasever}/library|g" \
     Lib/pydoc.py || exit 1
@@ -104,8 +115,8 @@ export OPT="$RPM_OPT_FLAGS -D_GNU_SOURCE -fPIC -fwrapv"
 export LINKCC="gcc"
 export CFLAGS="$CFLAGS `pkg-config --cflags openssl`"
 # No rpath changes yet
-#export LDFLAGS="$RPM_LD_FLAGS `pkg-config --libs-only-L openssl` -Wl,-rpath=%{_libdir64}"
-export LDFLAGS="$RPM_LD_FLAGS `pkg-config --libs-only-L openssl`"
+export LDFLAGS="$RPM_LD_FLAGS `pkg-config --libs-only-L openssl` -Wl,-rpath=%{libdir}"
+#export LDFLAGS="$RPM_LD_FLAGS `pkg-config --libs-only-L openssl`"
 
 ConfName=optimized
 BinaryName=python
@@ -210,21 +221,26 @@ find %{buildroot} -type f -a -name "*.py" -print0 | \
 # Remove all references to the buildroot, just for good measure
 find %{buildroot} -type f -exec sed -i 's|%{buildroot}||' {} \;
 
-# Do not take blank lines or test files
-find %{buildroot} -type d | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' > allfiles
-# Do not take files with whitespace
-find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
+# Delete test files
+rm -rf '%{buildroot}%{libdir}/python%{pybasever}/test'
+find '%{buildroot}' -name '* *' -delete
+
+find %{buildroot} -type d |  sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' > allfiles
+find %{buildroot} -type f -o -type l | sed "s|%{buildroot}||" | grep -vE '^$' >> allfiles
 
 %clean
 rm -rf %{buildroot}
 
 %files -f allfiles
-%defattr(-,root,system)
+%defattr(-,root,root)
 %doc LICENSE README
 %doc Misc/README.valgrind Misc/valgrind-python.supp
 %doc Misc/gdbinit
 
 %changelog
+* Tue May 24 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-1
+- Simplify file list
+
 * Wed Mar 23 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-0
 - started development on the present version.  Will be bumped to release 1 when
   compiles and installs properly.
