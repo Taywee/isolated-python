@@ -10,8 +10,8 @@
 
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pythonroot}
 Name: ea-python
-Version: 3.5.1
-Release: 2
+Version: 3.5.3
+Release: 0
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -111,7 +111,7 @@ cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
 # Copy dependent libraries
-packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline tcl sqlite zlib"
+packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline tcl sqlite zlib xz-libs"
 rpm -ql $packages | grep -E '/opt/freeware/lib64/.*\.so' | sort | uniq | while read so; do
     cp "$so" %{buildroot}%{_libdir64}
 done
@@ -140,6 +140,9 @@ find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever
 %doc Misc/gdbinit
 
 %changelog
+* Wed Jul 20 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.3-0
+- Add xz-libs
+
 * Thu May 19 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-2
 - Trim out huge test files
 
