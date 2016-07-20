@@ -5,9 +5,13 @@
 .. module:: pathlib
    :synopsis: Object-oriented filesystem paths
 
+.. versionadded:: 3.4
+
+**Source code:** :source:`Lib/pathlib.py`
+
 .. index:: single: path; operations
 
-.. versionadded:: 3.4
+--------------
 
 This module offers classes representing filesystem paths with semantics
 appropriate for different operating systems.  Path classes are divided
@@ -364,28 +368,6 @@ Pure paths provide the following methods and properties:
       >>> PureWindowsPath('//some/share').name
       ''
 
-
-.. data:: PurePath.path
-
-   A string representing the full path::
-
-      >>> PurePosixPath('my/library/setup.py').path
-      'my/library/setup.py'
-
-   This always returns the same value as ``str(p)``; it is included to
-   serve as a one-off protocol.  Code that wants to support both
-   strings and ``pathlib.Path`` objects as filenames can write
-   ``arg = getattr(arg, 'path', arg)`` to get the path as a string.
-   This can then be passed to various system calls or library
-   functions that expect a string.  Unlike the alternative
-   ``arg = str(arg)``, this will still raise an exception if an object
-   of some other type is given by accident.
-
-   A nice advantage is that this protocol is also supported by
-   :class:`os.DirEntry` objects returned by :func:`os.scandir`.
-
-   .. versionadded:: 3.4.5
-   .. versionadded:: 3.5.2
 
 .. data:: PurePath.suffix
 
@@ -909,8 +891,9 @@ call fails (for example because the path doesn't exist):
 
 .. method:: Path.rename(target)
 
-   Rename this file or directory to the given *target*.  *target* can be
-   either a string or another path object::
+   Rename this file or directory to the given *target*.  On Unix, if
+   *target* exists and is a file, it will be replaced silently if the user
+   has permission.  *target* can be either a string or another path object::
 
       >>> p = Path('foo')
       >>> p.open('w').write('some text')

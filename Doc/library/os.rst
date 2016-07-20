@@ -4,6 +4,9 @@
 .. module:: os
    :synopsis: Miscellaneous operating system interfaces.
 
+**Source code:** :source:`Lib/os.py`
+
+--------------
 
 This module provides a portable way of using operating system dependent
 functionality.  If you just want to read or write a file see :func:`open`, if
@@ -1192,7 +1195,11 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
 .. function:: writev(fd, buffers)
 
    Write the contents of *buffers* to file descriptor *fd*. *buffers* must be a
-   sequence of :term:`bytes-like objects <bytes-like object>`.
+   sequence of :term:`bytes-like objects <bytes-like object>`. Buffers are
+   processed in array order. Entire contents of first buffer is written before
+   proceeding to second, and so on. The operating system may set a limit
+   (sysconf() value SC_IOV_MAX) on the number of buffers that can be used.
+
    :func:`~os.writev` writes the contents of each object to the file descriptor
    and returns the total number of bytes written.
 
@@ -1623,9 +1630,15 @@ features:
 
    Create a directory named *path* with numeric mode *mode*.
 
+   If the directory already exists, :exc:`FileExistsError` is raised.
+
+   .. _mkdir_modebits:
+
    On some systems, *mode* is ignored.  Where it is used, the current umask
-   value is first masked out.  If the directory already exists,
-   :exc:`FileExistsError` is raised.
+   value is first masked out.  If bits other than the last 9 (i.e. the last 3
+   digits of the octal representation of the *mode*) are set, their meaning is
+   platform-dependent.  On some platforms, they are ignored and you should call
+   :func:`chmod` explicitly to set them.
 
    This function can also support :ref:`paths relative to directory descriptors
    <dir_fd>`.
@@ -1646,8 +1659,8 @@ features:
    Recursive directory creation function.  Like :func:`mkdir`, but makes all
    intermediate-level directories needed to contain the leaf directory.
 
-   The default *mode* is ``0o777`` (octal).  On some systems, *mode* is
-   ignored.  Where it is used, the current umask value is first masked out.
+   The *mode* parameter is passed to :func:`mkdir`; see :ref:`the mkdir()
+   description <mkdir_modebits>` for how it is interpreted.
 
    If *exist_ok* is ``False`` (the default), an :exc:`OSError` is raised if the
    target directory already exists.
@@ -2040,9 +2053,8 @@ features:
 
    Note that there is a nice correspondence between several attributes
    and methods of ``DirEntry`` and of :class:`pathlib.Path`.  In
-   particular, the ``name`` and ``path`` attributes have the same
-   meaning, as do the ``is_dir()``, ``is_file()``, ``is_symlink()``
-   and ``stat()`` methods.
+   particular, the ``name`` attribute has the same meaning, as do the
+   ``is_dir()``, ``is_file()``, ``is_symlink()`` and ``stat()`` methods.
 
    .. versionadded:: 3.5
 
@@ -3486,7 +3498,7 @@ operating system.
 
 .. data:: SCHED_RESET_ON_FORK
 
-   This flag can OR'ed with any other scheduling policy. When a process with
+   This flag can be OR'ed with any other scheduling policy. When a process with
    this flag set forks, its child's scheduling policy and priority are reset to
    the default.
 
@@ -3733,13 +3745,20 @@ Miscellaneous Functions
 
    This function returns random bytes from an OS-specific randomness source.  The
    returned data should be unpredictable enough for cryptographic applications,
-   though its exact quality depends on the OS implementation.  On a Unix-like
-   system this will query ``/dev/urandom``, and on Windows it will use
-   ``CryptGenRandom()``.  If a randomness source is not found,
+   though its exact quality depends on the OS implementation.
+
+   On Linux, ``getrandom()`` syscall is used if available and the urandom
+   entropy pool is initialized (``getrandom()`` does not block).
+   On a Unix-like system this will query ``/dev/urandom``. On Windows, it
+   will use ``CryptGenRandom()``.  If a randomness source is not found,
    :exc:`NotImplementedError` will be raised.
 
    For an easy-to-use interface to the random number generator
    provided by your platform, please see :class:`random.SystemRandom`.
+
+   .. versionchanged:: 3.5.2
+      On Linux, if ``getrandom()`` blocks (the urandom entropy pool is not
+      initialized yet), fall back on reading ``/dev/urandom``.
 
    .. versionchanged:: 3.5
       On Linux 3.17 and newer, the ``getrandom()`` syscall is now used

@@ -3,9 +3,13 @@
 
 .. module:: re
    :synopsis: Regular expression operations.
+
 .. moduleauthor:: Fredrik Lundh <fredrik@pythonware.com>
 .. sectionauthor:: Andrew M. Kuchling <amk@amk.ca>
 
+**Source code:** :source:`Lib/re.py`
+
+--------------
 
 This module provides regular expression matching operations similar to
 those found in Perl.
@@ -439,7 +443,7 @@ three digits in length.
    The ``'\u'`` and ``'\U'`` escape sequences have been added.
 
 .. deprecated-removed:: 3.5 3.6
-   Unknown escapes consist of ``'\'`` and ASCII letter now raise a
+   Unknown escapes consisting of ``'\'`` and ASCII letter now raise a
    deprecation warning and will be forbidden in Python 3.6.
 
 
@@ -811,8 +815,8 @@ attributes:
 
 .. method:: regex.search(string[, pos[, endpos]])
 
-   Scan through *string* looking for a location where this regular expression
-   produces a match, and return a corresponding :ref:`match object
+   Scan through *string* looking for the first location where this regular
+   expression produces a match, and return a corresponding :ref:`match object
    <match-objects>`.  Return ``None`` if no position in the string matches the
    pattern; note that this is different from finding a zero-length match at some
    point in the string.

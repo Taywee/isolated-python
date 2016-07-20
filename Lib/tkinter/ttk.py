@@ -1012,7 +1012,7 @@ class Progressbar(Widget):
         """Begin autoincrement mode: schedules a recurring timer event
         that calls method step every interval milliseconds.
 
-        interval defaults to 50 milliseconds (20 steps/second) if ommited."""
+        interval defaults to 50 milliseconds (20 steps/second) if omitted."""
         self.tk.call(self._w, "start", interval)
 
 
@@ -1392,7 +1392,9 @@ class Treeview(Widget, tkinter.XView, tkinter.YView):
 
     def selection(self, selop=None, items=None):
         """If selop is not specified, returns selected items."""
-        return self.tk.call(self._w, "selection", selop, items)
+        if isinstance(items, (str, bytes)):
+            items = (items,)
+        return self.tk.splitlist(self.tk.call(self._w, "selection", selop, items))
 
 
     def selection_set(self, items):

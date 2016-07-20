@@ -4,6 +4,9 @@
 .. module:: socket
    :synopsis: Low-level networking interface.
 
+**Source code:** :source:`Lib/socket.py`
+
+--------------
 
 This module provides access to the BSD *socket* interface. It is available on
 all modern Unix systems, Windows, MacOS, and probably additional platforms.
@@ -927,13 +930,12 @@ to sockets.
 
 .. method:: socket.fileno()
 
-   Return the socket's file descriptor (a small integer).  This is useful with
-   :func:`select.select`.
+   Return the socket's file descriptor (a small integer), or -1 on failure. This
+   is useful with :func:`select.select`.
 
    Under Windows the small integer returned by this method cannot be used where a
    file descriptor can be used (such as :func:`os.fdopen`).  Unix does not have
    this limitation.
-
 
 .. method:: socket.get_inheritable()
 

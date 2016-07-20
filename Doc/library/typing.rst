@@ -4,9 +4,9 @@
 .. module:: typing
    :synopsis: Support for type hints (see PEP 484).
 
-**Source code:** :source:`Lib/typing.py`
-
 .. versionadded:: 3.5
+
+**Source code:** :source:`Lib/typing.py`
 
 --------------
 
@@ -156,7 +156,7 @@ You can use multiple inheritance with :class:`Generic`::
    class LinkedList(Sized, Generic[T]):
        ...
 
-When inheriting from generic classes, some type variables could fixed::
+When inheriting from generic classes, some type variables could be fixed::
 
     from typing import TypeVar, Mapping
 
@@ -297,7 +297,7 @@ The module defines the following classes, functions and decorators:
 
 .. class:: Tuple
 
-  Tuple type; ``Tuple[X, Y]`` is the is the type of a tuple of two items
+  Tuple type; ``Tuple[X, Y]`` is the type of a tuple of two items
   with the first item of type X and the second of type Y.
 
   Example: ``Tuple[T1, T2]`` is a tuple of two elements corresponding
@@ -428,8 +428,8 @@ The module defines the following classes, functions and decorators:
       def vec2(x: T, y: T) -> List[T]:
           return [x, y]
 
-      def slice__to_4(vector: Sequence[T]) -> List[T]:
-          return vector[0:4]
+      def keep_positives(vector: Sequence[T]) -> List[T]:
+          return [item for item in vector if item > 0]
 
 .. class:: Set(set, MutableSet[T])
 

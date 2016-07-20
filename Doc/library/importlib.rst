@@ -9,6 +9,9 @@
 
 .. versionadded:: 3.1
 
+**Source code:** :source:`Lib/importlib/__init__.py`
+
+--------------
 
 Introduction
 ------------
@@ -51,6 +54,9 @@ generically as an :term:`importer`) to participate in the import process.
 
     :pep:`366`
         Main module explicit relative imports
+
+    :pep:`420`
+        Implicit namespace packages
 
     :pep:`451`
         A ModuleSpec Type for the Import System
@@ -204,6 +210,11 @@ Functions
 
 .. module:: importlib.abc
     :synopsis: Abstract base classes related to import
+
+**Source code:** :source:`Lib/importlib/abc.py`
+
+--------------
+
 
 The :mod:`importlib.abc` module contains all of the core abstract base classes
 used by :keyword:`import`. Some subclasses of the core abstract base classes
@@ -694,6 +705,10 @@ ABC hierarchy::
 .. module:: importlib.machinery
     :synopsis: Importers and path hooks
 
+**Source code:** :source:`Lib/importlib/machinery.py`
+
+--------------
+
 This module contains the various objects that help :keyword:`import`
 find and load modules.
 
@@ -1075,6 +1090,11 @@ find and load modules.
 
 .. module:: importlib.util
     :synopsis: Utility code for importers
+
+
+**Source code:** :source:`Lib/importlib/util.py`
+
+--------------
 
 This module contains the various objects that help in the construction of
 an :term:`importer`.

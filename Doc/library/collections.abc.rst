@@ -3,19 +3,20 @@
 
 .. module:: collections.abc
    :synopsis: Abstract base classes for containers
+
 .. moduleauthor:: Raymond Hettinger <python at rcn.com>
 .. sectionauthor:: Raymond Hettinger <python at rcn.com>
 
 .. versionadded:: 3.3
    Formerly, this module was part of the :mod:`collections` module.
 
+**Source code:** :source:`Lib/_collections_abc.py`
+
 .. testsetup:: *
 
    from collections import *
    import itertools
    __name__ = '<doctest>'
-
-**Source code:** :source:`Lib/_collections_abc.py`
 
 --------------
 
@@ -53,6 +54,9 @@ ABC                        Inherits from          Abstract Methods        Mixin 
                                                   ``__delitem__``,        ``remove``, and ``__iadd__``
                                                   ``__len__``,
                                                   ``insert``
+
+:class:`ByteString`        :class:`Sequence`      ``__getitem__``,        Inherited :class:`Sequence` methods
+                                                  ``__len__``
 
 :class:`Set`               :class:`Sized`,        ``__contains__``,       ``__le__``, ``__lt__``, ``__eq__``, ``__ne__``,
                            :class:`Iterable`,     ``__iter__``,           ``__gt__``, ``__ge__``, ``__and__``, ``__or__``,
@@ -118,6 +122,7 @@ ABC                        Inherits from          Abstract Methods        Mixin 
 
 .. class:: Sequence
            MutableSequence
+           ByteString
 
    ABCs for read-only and mutable :term:`sequences <sequence>`.
 
@@ -133,7 +138,6 @@ ABC                        Inherits from          Abstract Methods        Mixin 
    .. versionchanged:: 3.5
       The index() method added support for *stop* and *start*
       arguments.
-
 
 .. class:: Set
            MutableSet

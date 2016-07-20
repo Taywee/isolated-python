@@ -1672,7 +1672,8 @@ class HTTPHandlerTest(BaseTest):
             secure_client = secure and sslctx
             self.h_hdlr = logging.handlers.HTTPHandler(host, '/frob',
                                                        secure=secure_client,
-                                                       context=context)
+                                                       context=context,
+                                                       credentials=('foo', 'bar'))
             self.log_data = None
             root_logger.addHandler(self.h_hdlr)
 
@@ -3388,6 +3389,7 @@ class ModuleLevelMiscTest(BaseTest):
         logging.setLoggerClass(logging.Logger)
         self.assertEqual(logging.getLoggerClass(), logging.Logger)
 
+    @support.requires_type_collecting
     def test_logging_at_shutdown(self):
         # Issue #20037
         code = """if 1:

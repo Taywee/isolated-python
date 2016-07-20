@@ -3,6 +3,7 @@
 
 .. module:: codecs
    :synopsis: Encode and decode data and streams.
+
 .. moduleauthor:: Marc-André Lemburg <mal@lemburg.com>
 .. sectionauthor:: Marc-André Lemburg <mal@lemburg.com>
 .. sectionauthor:: Martin v. Löwis <martin@v.loewis.de>
@@ -16,6 +17,8 @@
    pair: Codecs; decode
    single: streams
    pair: stackable; streams
+
+--------------
 
 This module defines base classes for standard Python codecs (encoders and
 decoders) and provides access to the internal Python codec registry, which
@@ -137,16 +140,16 @@ these additional functions which use :func:`lookup` for the codec lookup:
 
 .. function:: getreader(encoding)
 
-   Look up the codec for the given encoding and return its StreamReader class or
-   factory function.
+   Look up the codec for the given encoding and return its :class:`StreamReader`
+   class or factory function.
 
    Raises a :exc:`LookupError` in case the encoding cannot be found.
 
 
 .. function:: getwriter(encoding)
 
-   Look up the codec for the given encoding and return its StreamWriter class or
-   factory function.
+   Look up the codec for the given encoding and return its :class:`StreamWriter`
+   class or factory function.
 
    Raises a :exc:`LookupError` in case the encoding cannot be found.
 

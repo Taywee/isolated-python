@@ -120,7 +120,7 @@ are directly accessible:
 If a name is declared global, then all references and assignments go directly to
 the middle scope containing the module's global names.  To rebind variables
 found outside of the innermost scope, the :keyword:`nonlocal` statement can be
-used; if not declared nonlocal, those variable are read-only (an attempt to
+used; if not declared nonlocal, those variables are read-only (an attempt to
 write to such a variable will simply create a *new* local variable in the
 innermost scope, leaving the identically named outer variable unchanged).
 
@@ -951,8 +951,8 @@ Examples::
 .. rubric:: Footnotes
 
 .. [#] Except for one thing.  Module objects have a secret read-only attribute called
-   :attr:`__dict__` which returns the dictionary used to implement the module's
-   namespace; the name :attr:`__dict__` is an attribute but not a global name.
+   :attr:`~object.__dict__` which returns the dictionary used to implement the module's
+   namespace; the name :attr:`~object.__dict__` is an attribute but not a global name.
    Obviously, using this violates the abstraction of namespace implementation, and
    should be restricted to things like post-mortem debuggers.
 

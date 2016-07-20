@@ -3,8 +3,10 @@
 
 .. module:: xml.parsers.expat
    :synopsis: An interface to the Expat non-validating XML parser.
+
 .. moduleauthor:: Paul Prescod <paul@prescod.net>
 
+--------------
 
 .. Markup notes:
 
@@ -242,7 +244,7 @@ XMLParser Objects
 
 The following attributes contain values relating to the most recent error
 encountered by an :class:`xmlparser` object, and will only have correct values
-once a call to :meth:`Parse` or :meth:`ParseFile` has raised a
+once a call to :meth:`Parse` or :meth:`ParseFile` has raised an
 :exc:`xml.parsers.expat.ExpatError` exception.
 
 

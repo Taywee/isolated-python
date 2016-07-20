@@ -3,9 +3,13 @@
 
 .. module:: subprocess
    :synopsis: Subprocess management.
+
 .. moduleauthor:: Peter Åstrand <astrand@lysator.liu.se>
 .. sectionauthor:: Peter Åstrand <astrand@lysator.liu.se>
 
+**Source code:** :source:`Lib/subprocess.py`
+
+--------------
 
 The :mod:`subprocess` module allows you to spawn new processes, connect to their
 input/output/error pipes, and obtain their return codes.  This module intends to
@@ -188,7 +192,8 @@ compatibility with older versions, see the :ref:`call-function-trio` section.
 
     .. attribute:: returncode
 
-        Exit status of the child process.
+        Exit status of the child process.  If the process exited due to a
+        signal, this will be the negative signal number.
 
     .. attribute:: cmd
 

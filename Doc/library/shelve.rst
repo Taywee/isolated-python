@@ -4,10 +4,9 @@
 .. module:: shelve
    :synopsis: Python object persistence.
 
+**Source code:** :source:`Lib/shelve.py`
 
 .. index:: module: pickle
-
-**Source code:** :source:`Lib/shelve.py`
 
 --------------
 
@@ -109,7 +108,7 @@ Restrictions
    A subclass of :class:`collections.abc.MutableMapping` which stores pickled
    values in the *dict* object.
 
-   By default, version 0 pickles are used to serialize values.  The version of the
+   By default, version 3 pickles are used to serialize values.  The version of the
    pickle protocol can be specified with the *protocol* parameter. See the
    :mod:`pickle` documentation for a discussion of the pickle protocols.
 

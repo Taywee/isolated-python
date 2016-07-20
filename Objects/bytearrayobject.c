@@ -246,7 +246,6 @@ PyByteArray_Resize(PyObject *self, Py_ssize_t requested_size)
 PyObject *
 PyByteArray_Concat(PyObject *a, PyObject *b)
 {
-    Py_ssize_t size;
     Py_buffer va, vb;
     PyByteArrayObject *result = NULL;
 
@@ -259,13 +258,13 @@ PyByteArray_Concat(PyObject *a, PyObject *b)
             goto done;
     }
 
-    size = va.len + vb.len;
-    if (size < 0) {
-            PyErr_NoMemory();
-            goto done;
+    if (va.len > PY_SSIZE_T_MAX - vb.len) {
+        PyErr_NoMemory();
+        goto done;
     }
 
-    result = (PyByteArrayObject *) PyByteArray_FromStringAndSize(NULL, size);
+    result = (PyByteArrayObject *) \
+        PyByteArray_FromStringAndSize(NULL, va.len + vb.len);
     if (result != NULL) {
         memcpy(result->ob_bytes, va.buf, va.len);
         memcpy(result->ob_bytes + va.len, vb.buf, vb.len);
@@ -315,7 +314,6 @@ bytearray_length(PyByteArrayObject *self)
 static PyObject *
 bytearray_iconcat(PyByteArrayObject *self, PyObject *other)
 {
-    Py_ssize_t mysize;
     Py_ssize_t size;
     Py_buffer vo;
 
@@ -325,17 +323,16 @@ bytearray_iconcat(PyByteArrayObject *self, PyObject *other)
         return NULL;
     }
 
-    mysize = Py_SIZE(self);
-    size = mysize + vo.len;
-    if (size < 0) {
+    size = Py_SIZE(self);
+    if (size > PY_SSIZE_T_MAX - vo.len) {
         PyBuffer_Release(&vo);
         return PyErr_NoMemory();
     }
-    if (PyByteArray_Resize((PyObject *)self, size) < 0) {
+    if (PyByteArray_Resize((PyObject *)self, size + vo.len) < 0) {
         PyBuffer_Release(&vo);
         return NULL;
     }
-    memcpy(PyByteArray_AS_STRING(self) + mysize, vo.buf, vo.len);
+    memcpy(PyByteArray_AS_STRING(self) + size, vo.buf, vo.len);
     PyBuffer_Release(&vo);
     Py_INCREF(self);
     return (PyObject *)self;
@@ -2477,7 +2474,17 @@ bytearray_extend(PyByteArrayObject *self, PyObject *iterable_of_ints)
         Py_DECREF(item);
 
         if (len >= buf_size) {
-            buf_size = len + (len >> 1) + 1;
+            Py_ssize_t addition;
+            if (len == PY_SSIZE_T_MAX) {
+                Py_DECREF(it);
+                Py_DECREF(bytearray_obj);
+                return PyErr_NoMemory();
+            }
+            addition = len >> 1;
+            if (addition > PY_SSIZE_T_MAX - len - 1)
+                buf_size = PY_SSIZE_T_MAX;
+            else
+                buf_size = len + addition + 1;
             if (PyByteArray_Resize((PyObject *)bytearray_obj, buf_size) < 0) {
                 Py_DECREF(it);
                 Py_DECREF(bytearray_obj);
@@ -3192,8 +3199,12 @@ static PyObject *
 bytearrayiter_length_hint(bytesiterobject *it)
 {
     Py_ssize_t len = 0;
-    if (it->it_seq)
+    if (it->it_seq) {
         len = PyByteArray_GET_SIZE(it->it_seq) - it->it_index;
+        if (len < 0) {
+            len = 0;
+        }
+    }
     return PyLong_FromSsize_t(len);
 }
 

@@ -821,7 +821,8 @@ class ContextTests(unittest.TestCase):
             self.assertEqual(ssl.OP_ALL | ssl.OP_NO_TLSv1 | ssl.OP_NO_SSLv3,
                              ctx.options)
             ctx.options = 0
-            self.assertEqual(0, ctx.options)
+            # Ubuntu has OP_NO_SSLv3 forced on by default
+            self.assertEqual(0, ctx.options & ~ssl.OP_NO_SSLv3)
         else:
             with self.assertRaises(ValueError):
                 ctx.options = 0
@@ -2792,19 +2793,12 @@ else:
                         # consume data
                         s.read()
 
-                data = b"data"
-
                 # read(-1, buffer) is supported, even though read(-1) is not
+                data = b"data"
                 s.send(data)
                 buffer = bytearray(len(data))
                 self.assertEqual(s.read(-1, buffer), len(data))
                 self.assertEqual(buffer, data)
-
-                # recv/read(0) should return no data
-                s.send(data)
-                self.assertEqual(s.recv(0), b"")
-                self.assertEqual(s.read(0), b"")
-                self.assertEqual(s.read(), data)
 
                 # Make sure sendmsg et al are disallowed to avoid
                 # inadvertent disclosure of data and/or corruption
@@ -2820,6 +2814,26 @@ else:
                 self.assertRaises(ValueError, s.read, -1)
 
                 s.close()
+
+        def test_recv_zero(self):
+            server = ThreadedEchoServer(CERTFILE)
+            server.__enter__()
+            self.addCleanup(server.__exit__, None, None)
+            s = socket.create_connection((HOST, server.port))
+            self.addCleanup(s.close)
+            s = ssl.wrap_socket(s, suppress_ragged_eofs=False)
+            self.addCleanup(s.close)
+
+            # recv/read(0) should return no data
+            s.send(b"data")
+            self.assertEqual(s.recv(0), b"")
+            self.assertEqual(s.read(0), b"")
+            self.assertEqual(s.read(), b"data")
+
+            # Should not block if the other end sends no data
+            s.setblocking(False)
+            self.assertEqual(s.recv(0), b"")
+            self.assertEqual(s.recv_into(bytearray()), 0)
 
         def test_nonblocking_send(self):
             server = ThreadedEchoServer(CERTFILE,

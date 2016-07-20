@@ -3,8 +3,12 @@
 
 .. module:: sqlite3
    :synopsis: A DB-API 2.0 implementation using SQLite 3.x.
+
 .. sectionauthor:: Gerhard Häring <gh@ghaering.de>
 
+**Source code:** :source:`Lib/sqlite3/`
+
+--------------
 
 SQLite is a C library that provides a lightweight disk-based database that
 doesn't require a separate server process and allows accessing the database
@@ -190,6 +194,11 @@ Module functions and constants
    any combination of :const:`PARSE_DECLTYPES` and :const:`PARSE_COLNAMES` to turn
    type detection on.
 
+   By default, *check_same_thread* is :const:`True` and only the creating thread may
+   use the connection. If set :const:`False`, the returned connection may be shared
+   across multiple threads. When using multiple threads with the same connection
+   writing operations should be serialized by the user to avoid data corruption.
+
    By default, the :mod:`sqlite3` module uses its :class:`Connection` class for the
    connect call.  You can, however, subclass the :class:`Connection` class and make
    :func:`connect` use your class instead by providing your class for the *factory*
@@ -300,25 +309,26 @@ Connection Objects
       call :meth:`commit`. If you just close your database connection without
       calling :meth:`commit` first, your changes will be lost!
 
-   .. method:: execute(sql, [parameters])
+   .. method:: execute(sql[, parameters])
 
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`execute
-      <Cursor.execute>` method with the parameters given.
+      This is a nonstandard shortcut that creates a cursor object by calling
+      the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.execute` method with the *parameters* given, and returns
+      the cursor.
 
+   .. method:: executemany(sql[, parameters])
 
-   .. method:: executemany(sql, [parameters])
-
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`executemany
-      <Cursor.executemany>` method with the parameters given.
+      This is a nonstandard shortcut that creates a cursor object by
+      calling the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.executemany` method with the *parameters* given, and
+      returns the cursor.
 
    .. method:: executescript(sql_script)
 
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`executescript
-      <Cursor.executescript>` method with the parameters given.
-
+      This is a nonstandard shortcut that creates a cursor object by
+      calling the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.executescript` method with the given *sql_script*, and
+      returns the cursor.
 
    .. method:: create_function(name, num_params, func)
 
@@ -479,10 +489,6 @@ Connection Objects
       :mod:`sqlite3` module will return Unicode objects for ``TEXT``. If you want to
       return bytestrings instead, you can set it to :class:`bytes`.
 
-      For efficiency reasons, there's also a way to return :class:`str` objects
-      only for non-ASCII data, and :class:`bytes` otherwise. To activate it, set
-      this attribute to :const:`sqlite3.OptimizedUnicode`.
-
       You can also set it to any other callable that accepts a single bytestring
       parameter and returns the resulting object.
 
@@ -524,7 +530,7 @@ Cursor Objects
 
    A :class:`Cursor` instance has the following attributes and methods.
 
-   .. method:: execute(sql, [parameters])
+   .. method:: execute(sql[, parameters])
 
       Executes an SQL statement. The SQL statement may be parameterized (i. e.
       placeholders instead of SQL literals). The :mod:`sqlite3` module supports two
@@ -536,7 +542,7 @@ Cursor Objects
       .. literalinclude:: ../includes/sqlite3/execute_1.py
 
       :meth:`execute` will only execute a single SQL statement. If you try to execute
-      more than one statement with it, it will raise a Warning. Use
+      more than one statement with it, it will raise an ``sqlite3.Warning``. Use
       :meth:`executescript` if you want to execute multiple SQL statements with one
       call.
 
@@ -544,8 +550,8 @@ Cursor Objects
    .. method:: executemany(sql, seq_of_parameters)
 
       Executes an SQL command against all parameter sequences or mappings found in
-      the sequence *sql*.  The :mod:`sqlite3` module also allows using an
-      :term:`iterator` yielding parameters instead of a sequence.
+      the sequence *seq_of_parameters*.  The :mod:`sqlite3` module also allows
+      using an :term:`iterator` yielding parameters instead of a sequence.
 
       .. literalinclude:: ../includes/sqlite3/executemany_1.py
 
@@ -560,7 +566,7 @@ Cursor Objects
       at once. It issues a ``COMMIT`` statement first, then executes the SQL script it
       gets as a parameter.
 
-      *sql_script* can be an instance of :class:`str` or :class:`bytes`.
+      *sql_script* can be an instance of :class:`str`.
 
       Example:
 

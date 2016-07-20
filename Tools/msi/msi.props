@@ -39,7 +39,7 @@
     
     <ItemGroup>
         <Compile Include="$(MSBuildThisFileDirectory)common.wxs" />
-        <WxlTemplate Include="$(MSBuildThisFileDirectory)\*.wxl_template" />
+        <WxlTemplate Include="$(MSBuildThisFileDirectory)\*.wxl_template" Condition="$(IgnoreCommonWxlTemplates) != 'true'" />
         <WixExtension Include="WixUtilExtension">
             <HintPath>WixUtilExtension</HintPath>
             <Name>WixUtilExtension</Name>
@@ -47,7 +47,7 @@
     </ItemGroup>
 
     <PropertyGroup>
-        <IntermediateOutputPath>$(PySourcePath)PCBuild\obj\$(Configuration)_$(Platform)_Setup\$(OutputName)</IntermediateOutputPath>
+        <IntermediateOutputPath>$(Py_IntDir)\$(Configuration)_$(Platform)_Setup\$(OutputName)</IntermediateOutputPath>
         <IntermediateOutputPath Condition="'$(OutputSuffix)' != ''">$(IntermediateOutputPath)_$(OutputSuffix)</IntermediateOutputPath>
         <OutputPath Condition="'$(OutputPath)' == ''">$(BuildPath)</OutputPath>
         <OutputPath Condition="!HasTrailingSlash($(OutputPath))">$(OutputPath)\</OutputPath>
@@ -124,6 +124,12 @@
         <LinkerBindInputPaths Include="$(VS140COMNTOOLS)\..\..\VC\redist\$(Platform)\Microsoft.VC140.CRT">
             <BindName>redist</BindName>
         </LinkerBindInputPaths>
+        <LinkerBindInputPaths Include="$(BuildPath32)">
+            <BindName>build32</BindName>
+        </LinkerBindInputPaths>
+        <LinkerBindInputPaths Include="$(BuildPath64)">
+            <BindName>build64</BindName>
+        </LinkerBindInputPaths>
     </ItemGroup>
 
     <Target Name="_ValidateMsiProps" BeforeTargets="PrepareForBuild">
@@ -150,7 +156,7 @@
             <Uri>lib2to3/pickles</Uri>
         </_Uuid>
     </ItemGroup>
-    <Target Name="_GenerateGuids" AfterTargets="PrepareForBuild">
+    <Target Name="_GenerateGuids" AfterTargets="PrepareForBuild" Condition="$(TargetName) != 'launcher'">
         <PropertyGroup>
             <_Uuids>@(_Uuid->'("%(Identity)", "$(MajorVersionNumber).$(MinorVersionNumber)/%(Uri)")',',')</_Uuids>
             <_GenerateCommand>import uuid; print('\n'.join('{}={}'.format(i, uuid.uuid5(uuid.UUID('c8d9733e-a70c-43ff-ab0c-e26456f11083'), '$(ReleaseUri.Replace(`{arch}`, `$(ArchName)`))' + j)) for i,j in [$(_Uuids.Replace(`"`,`'`))]))</_GenerateCommand>

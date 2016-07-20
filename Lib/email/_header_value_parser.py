@@ -439,7 +439,7 @@ class UnstructuredTokenList(TokenList):
                 if folded.append_if_fits(part):
                     continue
             if part.has_fws:
-                part.fold(folded)
+                part._fold(folded)
                 continue
             # It can't be split...we just have to put it on its own line.
             folded.append(tstr)
@@ -460,7 +460,7 @@ class UnstructuredTokenList(TokenList):
                     last_ew = len(res)
                 else:
                     tl = get_unstructured(''.join(res[last_ew:] + [spart]))
-                    res.append(tl.as_encoded_word())
+                    res.append(tl.as_encoded_word(charset))
         return ''.join(res)
 
 
@@ -2872,7 +2872,7 @@ def parse_content_type_header(value):
         _find_mime_parameters(ctype, value)
         return ctype
     ctype.append(token)
-    # XXX: If we really want to follow the formal grammer we should make
+    # XXX: If we really want to follow the formal grammar we should make
     # mantype and subtype specialized TokenLists here.  Probably not worth it.
     if not value or value[0] != '/':
         ctype.defects.append(errors.InvalidHeaderDefect(

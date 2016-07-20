@@ -3,6 +3,7 @@
 
 .. module:: xmlrpc.server
    :synopsis: Basic XML-RPC server implementations.
+
 .. moduleauthor:: Brian Quinlan <brianq@activestate.com>
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
@@ -292,7 +293,7 @@ requests sent to Python CGI scripts.
 
 .. method:: CGIXMLRPCRequestHandler.handle_request(request_text=None)
 
-   Handle a XML-RPC request. If *request_text* is given, it  should be the POST
+   Handle an XML-RPC request. If *request_text* is given, it should be the POST
    data provided by the HTTP server,  otherwise the contents of stdin will be used.
 
 Example::

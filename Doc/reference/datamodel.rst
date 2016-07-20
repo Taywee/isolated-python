@@ -454,6 +454,19 @@ Callable types
 
       .. tabularcolumns:: |l|L|l|
 
+      .. index::
+         single: __doc__ (function attribute)
+         single: __name__ (function attribute)
+         single: __module__ (function attribute)
+         single: __dict__ (function attribute)
+         single: __defaults__ (function attribute)
+         single: __closure__ (function attribute)
+         single: __code__ (function attribute)
+         single: __globals__ (function attribute)
+         single: __annotations__ (function attribute)
+         single: __kwdefaults__ (function attribute)
+         pair: global; namespace
+
       +-------------------------+-------------------------------+-----------+
       | Attribute               | Meaning                       |           |
       +=========================+===============================+===========+
@@ -462,10 +475,11 @@ Callable types
       |                         | unavailable; not inherited by |           |
       |                         | subclasses                    |           |
       +-------------------------+-------------------------------+-----------+
-      | :attr:`__name__`        | The function's name           | Writable  |
+      | :attr:`~definition.\    | The function's name           | Writable  |
+      | __name__`               |                               |           |
       +-------------------------+-------------------------------+-----------+
-      | :attr:`__qualname__`    | The function's                | Writable  |
-      |                         | :term:`qualified name`        |           |
+      | :attr:`~definition.\    | The function's                | Writable  |
+      | __qualname__`           | :term:`qualified name`        |           |
       |                         |                               |           |
       |                         | .. versionadded:: 3.3         |           |
       +-------------------------+-------------------------------+-----------+
@@ -489,7 +503,7 @@ Callable types
       |                         | module in which the function  |           |
       |                         | was defined.                  |           |
       +-------------------------+-------------------------------+-----------+
-      | :attr:`__dict__`        | The namespace supporting      | Writable  |
+      | :attr:`~object.__dict__`| The namespace supporting      | Writable  |
       |                         | arbitrary function            |           |
       |                         | attributes.                   |           |
       +-------------------------+-------------------------------+-----------+
@@ -519,19 +533,6 @@ Callable types
       Additional information about a function's definition can be retrieved from its
       code object; see the description of internal types below.
 
-      .. index::
-         single: __doc__ (function attribute)
-         single: __name__ (function attribute)
-         single: __module__ (function attribute)
-         single: __dict__ (function attribute)
-         single: __defaults__ (function attribute)
-         single: __closure__ (function attribute)
-         single: __code__ (function attribute)
-         single: __globals__ (function attribute)
-         single: __annotations__ (function attribute)
-         single: __kwdefaults__ (function attribute)
-         pair: global; namespace
-
    Instance methods
       .. index::
          object: method
@@ -550,7 +551,7 @@ Callable types
 
       Special read-only attributes: :attr:`__self__` is the class instance object,
       :attr:`__func__` is the function object; :attr:`__doc__` is the method's
-      documentation (same as ``__func__.__doc__``); :attr:`__name__` is the
+      documentation (same as ``__func__.__doc__``); :attr:`~definition.__name__` is the
       method name (same as ``__func__.__name__``); :attr:`__module__` is the
       name of the module the method was defined in, or ``None`` if unavailable.
 
@@ -637,7 +638,7 @@ Callable types
       standard built-in module). The number and type of the arguments are
       determined by the C function. Special read-only attributes:
       :attr:`__doc__` is the function's documentation string, or ``None`` if
-      unavailable; :attr:`__name__` is the function's name; :attr:`__self__` is
+      unavailable; :attr:`~definition.__name__` is the function's name; :attr:`__self__` is
       set to ``None`` (but see the next item); :attr:`__module__` is the name of
       the module the function was defined in or ``None`` if unavailable.
 
@@ -687,7 +688,7 @@ Modules
 
    .. index:: single: __dict__ (module attribute)
 
-   Special read-only attribute: :attr:`__dict__` is the module's namespace as a
+   Special read-only attribute: :attr:`~object.__dict__` is the module's namespace as a
    dictionary object.
 
    .. impl-detail::
@@ -743,7 +744,7 @@ Custom classes
    method object, it is transformed into the object wrapped by the static method
    object. See section :ref:`descriptors` for another way in which attributes
    retrieved from a class may differ from those actually contained in its
-   :attr:`__dict__`.
+   :attr:`~object.__dict__`.
 
    .. index:: triple: class; attribute; assignment
 
@@ -761,8 +762,8 @@ Custom classes
       single: __bases__ (class attribute)
       single: __doc__ (class attribute)
 
-   Special attributes: :attr:`__name__` is the class name; :attr:`__module__` is
-   the module name in which the class was defined; :attr:`__dict__` is the
+   Special attributes: :attr:`~definition.__name__` is the class name; :attr:`__module__` is
+   the module name in which the class was defined; :attr:`~object.__dict__` is the
    dictionary containing the class's namespace; :attr:`~class.__bases__` is a
    tuple (possibly empty or a singleton) containing the base classes, in the
    order of their occurrence in the base class list; :attr:`__doc__` is the
@@ -785,7 +786,7 @@ Class instances
    class method objects are also transformed; see above under "Classes".  See
    section :ref:`descriptors` for another way in which attributes of a class
    retrieved via its instances may differ from the objects actually stored in
-   the class's :attr:`__dict__`.  If no class attribute is found, and the
+   the class's :attr:`~object.__dict__`.  If no class attribute is found, and the
    object's class has a :meth:`__getattr__` method, that is called to satisfy
    the lookup.
 
@@ -846,11 +847,9 @@ Internal types
    definitions may change with future versions of the interpreter, but they are
    mentioned here for completeness.
 
-   Code objects
-      .. index::
-         single: bytecode
-         object: code
+   .. index:: bytecode, object; code, code object
 
+   Code objects
       Code objects represent *byte-compiled* executable Python code, or :term:`bytecode`.
       The difference between a code object and a function object is that the function
       object contains an explicit reference to the function's globals (the module in
@@ -1468,7 +1467,7 @@ method (a so-called *descriptor* class) appears in an *owner* class (the
 descriptor must be in either the owner's class dictionary or in the class
 dictionary for one of its parents).  In the examples below, "the attribute"
 refers to the attribute whose name is the key of the property in the owner
-class' :attr:`__dict__`.
+class' :attr:`~object.__dict__`.
 
 
 .. method:: object.__get__(self, instance, owner)
@@ -1733,6 +1732,11 @@ current call is identified based on the first argument passed to the method.
 After the class object is created, it is passed to the class decorators
 included in the class definition (if any) and the resulting object is bound
 in the local namespace as the defined class.
+
+When a new class is created by ``type.__new__``, the object provided as the
+namespace parameter is copied to a standard Python dictionary and the original
+object is discarded. The new copy becomes the :attr:`~object.__dict__` attribute
+of the class object.
 
 .. seealso::
 
@@ -2354,6 +2358,7 @@ generators, coroutines do not directly support iteration.
    Coroutine objects are automatically closed using the above process when
    they are about to be destroyed.
 
+.. _async-iterators:
 
 Asynchronous Iterators
 ----------------------
@@ -2366,7 +2371,7 @@ Asynchronous iterators can be used in an :keyword:`async for` statement.
 
 .. method:: object.__aiter__(self)
 
-   Must return an *awaitable* resulting in an *asynchronous iterator* object.
+   Must return an *asynchronous iterator* object.
 
 .. method:: object.__anext__(self)
 
@@ -2379,7 +2384,7 @@ An example of an asynchronous iterable object::
         async def readline(self):
             ...
 
-        async def __aiter__(self):
+        def __aiter__(self):
             return self
 
         async def __anext__(self):
@@ -2389,6 +2394,49 @@ An example of an asynchronous iterable object::
             return val
 
 .. versionadded:: 3.5
+
+.. note::
+
+   .. versionchanged:: 3.5.2
+      Starting with CPython 3.5.2, ``__aiter__`` can directly return
+      :term:`asynchronous iterators <asynchronous iterator>`.  Returning
+      an :term:`awaitable` object will result in a
+      :exc:`PendingDeprecationWarning`.
+
+      The recommended way of writing backwards compatible code in
+      CPython 3.5.x is to continue returning awaitables from
+      ``__aiter__``.  If you want to avoid the PendingDeprecationWarning
+      and keep the code backwards compatible, the following decorator
+      can be used::
+
+          import functools
+          import sys
+
+          if sys.version_info < (3, 5, 2):
+              def aiter_compat(func):
+                  @functools.wraps(func)
+                  async def wrapper(self):
+                      return func(self)
+                  return wrapper
+          else:
+              def aiter_compat(func):
+                  return func
+
+      Example::
+
+          class AsyncIterator:
+
+              @aiter_compat
+              def __aiter__(self):
+                  return self
+
+              async def __anext__(self):
+                  ...
+
+      Starting with CPython 3.6, the :exc:`PendingDeprecationWarning`
+      will be replaced with the :exc:`DeprecationWarning`.
+      In CPython 3.7, returning an awaitable from ``__aiter__`` will
+      result in a :exc:`RuntimeError`.
 
 
 Asynchronous Context Managers

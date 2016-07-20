@@ -3,6 +3,7 @@
 
 .. module:: functools
    :synopsis: Higher-order functions and operations on callable objects.
+
 .. moduleauthor:: Peter Harris <scav@blueyonder.co.uk>
 .. moduleauthor:: Raymond Hettinger <python@rcn.com>
 .. moduleauthor:: Nick Coghlan <ncoghlan@gmail.com>
@@ -176,7 +177,7 @@ The :mod:`functools` module defines the following functions:
           def newfunc(*fargs, **fkeywords):
               newkeywords = keywords.copy()
               newkeywords.update(fkeywords)
-              return func(*(args + fargs), **newkeywords)
+              return func(*args, *fargs, **newkeywords)
           newfunc.func = func
           newfunc.args = args
           newfunc.keywords = keywords
@@ -473,7 +474,7 @@ have three read-only attributes:
 
 :class:`partial` objects are like :class:`function` objects in that they are
 callable, weak referencable, and can have attributes.  There are some important
-differences.  For instance, the :attr:`__name__` and :attr:`__doc__` attributes
+differences.  For instance, the :attr:`~definition.__name__` and :attr:`__doc__` attributes
 are not created automatically.  Also, :class:`partial` objects defined in
 classes behave like static methods and do not transform into bound methods
 during instance attribute look-up.

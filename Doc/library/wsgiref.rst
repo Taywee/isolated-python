@@ -3,9 +3,11 @@
 
 .. module:: wsgiref
    :synopsis: WSGI Utilities and Reference Implementation.
+
 .. moduleauthor:: Phillip J. Eby <pje@telecommunity.com>
 .. sectionauthor:: Phillip J. Eby <pje@telecommunity.com>
 
+--------------
 
 The Web Server Gateway Interface (WSGI) is a standard interface between web
 server software and web applications written in Python. Having a standard
@@ -514,6 +516,9 @@ input, output, and error streams.
    environment and streams via the constructor.  The supplied environment and
    streams are stored in the :attr:`stdin`, :attr:`stdout`, :attr:`stderr`, and
    :attr:`environ` attributes.
+
+   The :meth:`~io.BufferedIOBase.write` method of *stdout* should write
+   each chunk in full, like :class:`io.BufferedIOBase`.
 
 
 .. class:: BaseHandler()

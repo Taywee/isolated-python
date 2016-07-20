@@ -4,19 +4,18 @@
 .. module:: ftplib
    :synopsis: FTP protocol client (requires sockets).
 
+**Source code:** :source:`Lib/ftplib.py`
 
 .. index::
    pair: FTP; protocol
    single: FTP; ftplib (standard module)
-
-**Source code:** :source:`Lib/ftplib.py`
 
 --------------
 
 This module defines the class :class:`FTP` and a few related items. The
 :class:`FTP` class implements the client side of the FTP protocol.  You can use
 this to write Python programs that perform a variety of automated FTP jobs, such
-as mirroring other ftp servers.  It is also used by the module
+as mirroring other FTP servers.  It is also used by the module
 :mod:`urllib.request` to handle URLs that use FTP.  For more information on FTP
 (File Transfer Protocol), see Internet :rfc:`959`.
 

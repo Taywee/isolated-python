@@ -17,10 +17,10 @@ PyDoc_STRVAR(zlib_compress__doc__,
     {"compress", (PyCFunction)zlib_compress, METH_VARARGS, zlib_compress__doc__},
 
 static PyObject *
-zlib_compress_impl(PyModuleDef *module, Py_buffer *bytes, int level);
+zlib_compress_impl(PyObject *module, Py_buffer *bytes, int level);
 
 static PyObject *
-zlib_compress(PyModuleDef *module, PyObject *args)
+zlib_compress(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     Py_buffer bytes = {NULL, NULL};
@@ -48,7 +48,7 @@ PyDoc_STRVAR(zlib_decompress__doc__,
 "  data\n"
 "    Compressed data.\n"
 "  wbits\n"
-"    The window buffer size.\n"
+"    The window buffer size and container format.\n"
 "  bufsize\n"
 "    The initial output buffer size.");
 
@@ -56,11 +56,11 @@ PyDoc_STRVAR(zlib_decompress__doc__,
     {"decompress", (PyCFunction)zlib_decompress, METH_VARARGS, zlib_decompress__doc__},
 
 static PyObject *
-zlib_decompress_impl(PyModuleDef *module, Py_buffer *data, int wbits,
+zlib_decompress_impl(PyObject *module, Py_buffer *data, int wbits,
                      unsigned int bufsize);
 
 static PyObject *
-zlib_decompress(PyModuleDef *module, PyObject *args)
+zlib_decompress(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     Py_buffer data = {NULL, NULL};
@@ -95,7 +95,10 @@ PyDoc_STRVAR(zlib_compressobj__doc__,
 "  method\n"
 "    The compression algorithm.  If given, this must be DEFLATED.\n"
 "  wbits\n"
-"    The base two logarithm of the window size (range: 8..15).\n"
+"    +9 to +15: The base-two logarithm of the window size.  Include a zlib\n"
+"        container.\n"
+"    -9 to -15: Generate a raw stream.\n"
+"    +25 to +31: Include a gzip container.\n"
 "  memLevel\n"
 "    Controls the amount of memory used for internal compression state.\n"
 "    Valid values range from 1 to 9.  Higher values result in higher memory\n"
@@ -111,11 +114,11 @@ PyDoc_STRVAR(zlib_compressobj__doc__,
     {"compressobj", (PyCFunction)zlib_compressobj, METH_VARARGS|METH_KEYWORDS, zlib_compressobj__doc__},
 
 static PyObject *
-zlib_compressobj_impl(PyModuleDef *module, int level, int method, int wbits,
+zlib_compressobj_impl(PyObject *module, int level, int method, int wbits,
                       int memLevel, int strategy, Py_buffer *zdict);
 
 static PyObject *
-zlib_compressobj(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+zlib_compressobj(PyObject *module, PyObject *args, PyObject *kwargs)
 {
     PyObject *return_value = NULL;
     static char *_keywords[] = {"level", "method", "wbits", "memLevel", "strategy", "zdict", NULL};
@@ -146,7 +149,7 @@ PyDoc_STRVAR(zlib_decompressobj__doc__,
 "Return a decompressor object.\n"
 "\n"
 "  wbits\n"
-"    The window buffer size.\n"
+"    The window buffer size and container format.\n"
 "  zdict\n"
 "    The predefined compression dictionary.  This must be the same\n"
 "    dictionary as used by the compressor that produced the input data.");
@@ -155,10 +158,10 @@ PyDoc_STRVAR(zlib_decompressobj__doc__,
     {"decompressobj", (PyCFunction)zlib_decompressobj, METH_VARARGS|METH_KEYWORDS, zlib_decompressobj__doc__},
 
 static PyObject *
-zlib_decompressobj_impl(PyModuleDef *module, int wbits, PyObject *zdict);
+zlib_decompressobj_impl(PyObject *module, int wbits, PyObject *zdict);
 
 static PyObject *
-zlib_decompressobj(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+zlib_decompressobj(PyObject *module, PyObject *args, PyObject *kwargs)
 {
     PyObject *return_value = NULL;
     static char *_keywords[] = {"wbits", "zdict", NULL};
@@ -377,10 +380,10 @@ PyDoc_STRVAR(zlib_adler32__doc__,
     {"adler32", (PyCFunction)zlib_adler32, METH_VARARGS, zlib_adler32__doc__},
 
 static PyObject *
-zlib_adler32_impl(PyModuleDef *module, Py_buffer *data, unsigned int value);
+zlib_adler32_impl(PyObject *module, Py_buffer *data, unsigned int value);
 
 static PyObject *
-zlib_adler32(PyModuleDef *module, PyObject *args)
+zlib_adler32(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     Py_buffer data = {NULL, NULL};
@@ -414,10 +417,10 @@ PyDoc_STRVAR(zlib_crc32__doc__,
     {"crc32", (PyCFunction)zlib_crc32, METH_VARARGS, zlib_crc32__doc__},
 
 static PyObject *
-zlib_crc32_impl(PyModuleDef *module, Py_buffer *data, unsigned int value);
+zlib_crc32_impl(PyObject *module, Py_buffer *data, unsigned int value);
 
 static PyObject *
-zlib_crc32(PyModuleDef *module, PyObject *args)
+zlib_crc32(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     Py_buffer data = {NULL, NULL};
@@ -439,4 +442,4 @@ exit:
 #ifndef ZLIB_COMPRESS_COPY_METHODDEF
     #define ZLIB_COMPRESS_COPY_METHODDEF
 #endif /* !defined(ZLIB_COMPRESS_COPY_METHODDEF) */
-/*[clinic end generated code: output=cf81e1deae3af0ce input=a9049054013a1b77]*/
+/*[clinic end generated code: output=8545565b1a1822de input=a9049054013a1b77]*/

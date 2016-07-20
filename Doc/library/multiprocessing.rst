@@ -4,6 +4,9 @@
 .. module:: multiprocessing
    :synopsis: Process-based parallelism.
 
+**Source code:** :source:`Lib/multiprocessing/`
+
+--------------
 
 Introduction
 ------------
@@ -1007,7 +1010,7 @@ Connection objects are usually created using :func:`Pipe` -- see also
       using :meth:`recv`.
 
       The object must be picklable.  Very large pickles (approximately 32 MB+,
-      though it depends on the OS) may raise a ValueError exception.
+      though it depends on the OS) may raise a :exc:`ValueError` exception.
 
    .. method:: recv()
 
@@ -2478,7 +2481,7 @@ the connection.)
 
 If authentication is requested but no authentication key is specified then the
 return value of ``current_process().authkey`` is used (see
-:class:`~multiprocessing.Process`).  This value will automatically inherited by
+:class:`~multiprocessing.Process`).  This value will be automatically inherited by
 any :class:`~multiprocessing.Process` object that the current process creates.
 This means that (by default) all processes of a multi-process program will share
 a single authentication key which can be used when setting up connections
@@ -2720,12 +2723,7 @@ start method.
 
 More picklability
 
-    Ensure that all arguments to :meth:`Process.__init__` are
-    picklable.  This means, in particular, that bound or unbound
-    methods cannot be used directly as the ``target`` (unless you use
-    the *fork* start method) --- just define a function and use that
-    instead.
-
+    Ensure that all arguments to :meth:`Process.__init__` are picklable.
     Also, if you subclass :class:`~multiprocessing.Process` then make sure that
     instances will be picklable when the :meth:`Process.start
     <multiprocessing.Process.start>` method is called.

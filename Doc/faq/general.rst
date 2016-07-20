@@ -146,10 +146,9 @@ labeled 2.0aN precede the versions labeled 2.0bN, which precede versions labeled
 2.0cN, and *those* precede 2.0.
 
 You may also find version numbers with a "+" suffix, e.g. "2.2+".  These are
-unreleased versions, built directly from the Subversion trunk.  In practice,
-after a final minor release is made, the Subversion trunk is incremented to the
-next minor version, which becomes the "a0" version,
-e.g. "2.4a0".
+unreleased versions, built directly from the CPython development repository.  In
+practice, after a final minor release is made, the version is incremented to the
+next minor version, which becomes the "a0" version, e.g. "2.4a0".
 
 See also the documentation for :data:`sys.version`, :data:`sys.hexversion`, and
 :data:`sys.version_info`.
@@ -439,7 +438,7 @@ remember the methods for a list, they can do something like this::
    >>> L
    [1]
 
-With the interpreter, documentation is never far from the student as he's
+With the interpreter, documentation is never far from the student as they are
 programming.
 
 There are also good IDEs for Python.  IDLE is a cross-platform IDE for Python

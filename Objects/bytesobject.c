@@ -34,7 +34,7 @@ static PyBytesObject *nullstring;
    For PyBytes_FromString(), the parameter `str' points to a null-terminated
    string containing exactly `size' bytes.
 
-   For PyBytes_FromStringAndSize(), the parameter the parameter `str' is
+   For PyBytes_FromStringAndSize(), the parameter `str' is
    either NULL or else points to a string containing at least `size' bytes.
    For PyBytes_FromStringAndSize(), the string in the `str' parameter does
    not have to be null-terminated.  (Therefore it is safe to construct a
@@ -1265,7 +1265,6 @@ bytes_length(PyBytesObject *a)
 static PyObject *
 bytes_concat(PyObject *a, PyObject *b)
 {
-    Py_ssize_t size;
     Py_buffer va, vb;
     PyObject *result = NULL;
 
@@ -1290,13 +1289,12 @@ bytes_concat(PyObject *a, PyObject *b)
         goto done;
     }
 
-    size = va.len + vb.len;
-    if (size < 0) {
+    if (va.len > PY_SSIZE_T_MAX - vb.len) {
         PyErr_NoMemory();
         goto done;
     }
 
-    result = PyBytes_FromStringAndSize(NULL, size);
+    result = PyBytes_FromStringAndSize(NULL, va.len + vb.len);
     if (result != NULL) {
         memcpy(PyBytes_AS_STRING(result), va.buf, va.len);
         memcpy(PyBytes_AS_STRING(result) + va.len, vb.buf, vb.len);
