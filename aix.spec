@@ -11,7 +11,7 @@
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pythonroot}
 Name: ea-python
 Version: 3.5.3
-Release: 0
+Release: 1
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -128,7 +128,7 @@ ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 # Do not take blank lines or test files
 find %{buildroot} -type d | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}|%dir |" | grep -vE '^%dir $' > allfiles
 # Do not take files with whitespace
-find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
+find %{buildroot} -type f -o -type l | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever}/test' | sed "s|%{buildroot}||" | grep -vF ' ' >> allfiles
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -140,8 +140,8 @@ find %{buildroot} -type f | grep -vE '%{buildroot}%{_libdir64}/python%{pybasever
 %doc Misc/gdbinit
 
 %changelog
-* Wed Jul 20 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.3-0
-- Add xz-libs
+* Wed Jul 20 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.3-1
+- Fix symlinks
 
 * Thu May 19 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.1-2
 - Trim out huge test files
