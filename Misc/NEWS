@@ -25,11 +25,19 @@ Core and Builtins
 - Issue #27507: Add integer overflow check in bytearray.extend().  Patch by
   Xiang Zhang.
 
+- Issue #27581: Don't rely on wrapping for overflow check in
+  PySequence_Tuple().  Patch by Xiang Zhang.
+
 - Issue #27443: __length_hint__() of bytearray iterators no longer return a
   negative integer for a resized bytearray.
 
 Library
 -------
+
+- Issue #27130: In the "zlib" module, fix handling of large buffers
+  (typically 4 GiB) when compressing and decompressing.  Previously, inputs
+  were limited to 4 GiB, and compression and decompression operations did not
+  properly handle results of 4 GiB.
 
 - Issue #27533: Release GIL in nt._isdir
 
@@ -129,8 +137,16 @@ Tools/Demos
 Windows
 -------
 
+- Issue #27469: Adds a shell extension to the launcher so that drag and drop
+  works correctly.
+
 - Issue #27309: Enabled proper Windows styles in python[w].exe manifest.
 
+Build
+-----
+
+- Issue #26662: Set PYTHON_FOR_GEN in configure as the Python program to be
+  used for file generation during the build.
 
 What's New in Python 3.5.2?
 ===========================
