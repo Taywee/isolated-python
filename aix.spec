@@ -60,14 +60,15 @@ export NM="nm -X64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-export LDFLAGS="$LDFLAGS -L/usr/local/lib -pthread -Wl,-blibpath:%{_libdir64}:/usr/local/lib:/usr/lib:/lib"
+#export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread -Wl,-blibpath:%{_libdir64}:/usr/local/lib:/usr/lib:/lib -Wl,-brtl"
+export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread -Wl,-brtl"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
     --libdir=%{_libdir64} \
     --mandir=%{_mandir} \
-    --with-gcc="$CC -maix64 -I/usr/local/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --with-cxx-main="$CXX -maix64 -I/usr/local/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --disable-shared \
+    --enable-static \
 %ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
     --disable-ipv6 \
 %else
