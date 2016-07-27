@@ -11,7 +11,7 @@
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pythonroot}
 Name: ea-python
 Version: 3.5.3
-Release: 1
+Release: 2
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
@@ -21,21 +21,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 # Needed to remove dependencies on /usr/local/bin/python
 Autoreq: 0
-BuildRequires: make
-
-BuildRequires: bzip2 >= 1.0.2-4
-BuildRequires: db4-devel >= 4.7.25-2
-BuildRequires: expat-devel >= 2.1.0-1
-BuildRequires: gettext >= 0.10.40-6
-BuildRequires: gmp-devel >= 4.3.2-2
-BuildRequires: gdbm-devel >= 1.8.3-1
-BuildRequires: libffi-devel >= 3.0.13-1
-BuildRequires: openssl-devel >= 1.0.1
-BuildRequires: pkg-config
-BuildRequires: readline-devel >= 5.2-3
-BuildRequires: tcl-devel >= 8.5.8-2
-BuildRequires: sqlite-devel >= 3.7.3-1
-BuildRequires: zlib-devel >= 1.2.3-3
 
 #%ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
 #Requires: AIX-rpm >= 5.1.0.0
@@ -70,20 +55,19 @@ rm -rf Modules/expat Modules/zlib
 
 %build
 # setup environment for 64-bit build
-export AR="ar -X32_64"
-export NM="nm -X32_64"
+export AR="ar -X64"
+export NM="nm -X64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-export LDFLAGS="$LDFLAGS -L%{_prefix}/lib64 -pthread -Wl,-blibpath:%{_libdir64}:/opt/freeware/lib64:/opt/freeware/lib:/usr/lib:/lib"
+export LDFLAGS="$LDFLAGS -L/usr/local/lib -pthread -Wl,-blibpath:%{_libdir64}:/usr/local/lib:/usr/lib:/lib"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
     --libdir=%{_libdir64} \
     --mandir=%{_mandir} \
-    --with-gcc="$CC -maix64 -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --with-cxx-main="$CXX -maix64 -I/opt/freeware/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
-    --enable-shared \
+    --with-gcc="$CC -maix64 -I/usr/local/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
+    --with-cxx-main="$CXX -maix64 -I/usr/local/include -DAIX_GENUINE_CPLUSCPLUS -Wl,-brtl" \
 %ifos aix5.1 || %ifos aix5.2 || %ifos aix5.3
     --disable-ipv6 \
 %else
@@ -110,16 +94,6 @@ find %{buildroot}%{_libdir64} -name '*.py' | xargs %{buildroot}%{_bindir}/python
 cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
-# Copy dependent libraries
-packages="bzip2 db4 expat gettext libiconv gmp libgcc libstdc++ gdbm libffi openssl readline tcl sqlite zlib xz-libs"
-rpm -ql $packages | grep -E '/opt/freeware/lib64/.*\.so' | sort | uniq | while read so; do
-    cp "$so" %{buildroot}%{_libdir64}
-done
-
-rpm -ql $packages | grep -E '/opt/freeware/lib/.*\.a' | sort | uniq | while read a; do
-    cp "$a" %{buildroot}%{_libdir64}
-done
-
 ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.a
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
 cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
@@ -140,6 +114,9 @@ find %{buildroot} -type f -o -type l | grep -vE '%{buildroot}%{_libdir64}/python
 %doc Misc/gdbinit
 
 %changelog
+* Wed Jul 27 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.3-2
+- Static linking
+
 * Wed Jul 20 2016 Taylor C. Richberger <taywee@gmx.com> - 3.5.3-1
 - Fix symlinks
 
