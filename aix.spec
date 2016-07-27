@@ -60,8 +60,7 @@ export NM="nm -X64"
 
 # build 64-bit version
 export OBJECT_MODE=64
-#export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread -Wl,-blibpath:%{_libdir64}:/usr/local/lib:/usr/lib:/lib -Wl,-brtl"
-export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread -Wl,-brtl"
+export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
