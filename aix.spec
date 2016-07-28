@@ -54,13 +54,8 @@ package.
 rm -rf Modules/expat Modules/zlib
 
 %build
-# setup environment for 64-bit build
-export AR="ar -X64"
-export NM="nm -X64"
 
-# build 64-bit version
-export OBJECT_MODE=64
-export LDFLAGS="$LDFLAGS -L/usr/local/lib -L/usr/lib -L/lib -pthread"
+export LDFLAGS="$LDFLAGS -L%{buildroot}/%{_libdir64} -L/usr/local/lib -L/usr/lib -L/lib"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \
@@ -77,12 +72,11 @@ autoconf
     --with-system-expat \
     OPT="-O2"
 
-gmake %{?_smp_mflags}
+gmake -j5
 
 %install
 [ "%{buildroot}" != "/" ] && rm -rf "%{buildroot}"
 
-export OBJECT_MODE=64
 gmake DESTDIR=%{buildroot} install
 
 /usr/bin/strip -X64 %{buildroot}%{_bindir}/* || :
@@ -91,12 +85,12 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir64}
 
 find %{buildroot}%{_libdir64} -name '*.py' | xargs %{buildroot}%{_bindir}/python3 -mpy_compile || :
 
-cp libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
+cp -f libpython%{pybasever}m.a %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 chmod 0644 %{buildroot}%{_libdir64}/libpython%{pybasever}m.a
 
 ln -sf ../../libpython%{pybasever}m.a %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.a
 ln -sf ../../libpython%{pybasever}m.so %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/libpython%{pybasever}m.so
-cp -r Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
+cp -fr Modules/* %{buildroot}%{_libdir64}/python%{pybasever}/config-%{pybasever}m/
 ln -s config-%{pybasever}m %{buildroot}%{_libdir64}/python%{pybasever}/config
 
 # Do not take blank lines or test files
