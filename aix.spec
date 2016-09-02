@@ -55,7 +55,7 @@ rm -rf Modules/expat Modules/zlib
 
 %build
 
-export LDFLAGS="$LDFLAGS -L%{buildroot}/%{_libdir64} -L/usr/local/lib -L/usr/lib -L/lib"
+export LDFLAGS="$LDFLAGS -L%{buildroot}/%{_libdir64} -L/usr/local/lib -L/usr/lib -L/lib -lintl"
 autoconf
 ./configure \
     --prefix=%{pythonroot} \

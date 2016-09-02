@@ -40,8 +40,8 @@
 
 Summary: An interpreted, interactive, object-oriented programming language.  Will be isolated to %{pyroot}
 Name: ea-python
-Version: 3.5.1
-Release: 1
+Version: 3.5.3
+Release: 0
 License: Python
 Group: Development/Languages
 URL: https://github.com/Taywee/isolated-python
