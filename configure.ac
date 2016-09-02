@@ -7,7 +7,7 @@ m4_define(PYTHON_VERSION, 3.5)
 
 AC_PREREQ(2.65)
 
-AC_INIT(python, PYTHON_VERSION, http://bugs.python.org/)
+AC_INIT(python, PYTHON_VERSION, https://bugs.python.org/)
 
 AC_SUBST(BASECPPFLAGS)
 if test "$abs_srcdir" != "$abs_builddir"; then
@@ -49,7 +49,6 @@ fi
 AC_CONFIG_SRCDIR([Include/object.h])
 AC_CONFIG_HEADER(pyconfig.h)
 
-AC_SUBST(cross_compiling)
 AC_CANONICAL_HOST
 AC_SUBST(build)
 AC_SUBST(host)
@@ -81,12 +80,16 @@ if test "$cross_compiling" = yes; then
         AC_MSG_RESULT($interp)
 	PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib:$(srcdir)/Lib/$(PLATDIR) '$interp
     fi
+    # Used to comment out stuff for rebuilding generated files
+    GENERATED_COMMENT='#'
 elif test "$cross_compiling" = maybe; then
     AC_MSG_ERROR([Cross compiling required --host=HOST-TUPLE and --build=ARCH])
 else
     PYTHON_FOR_BUILD='./$(BUILDPYTHON) -E'
+    GENERATED_COMMENT=''
 fi
 AC_SUBST(PYTHON_FOR_BUILD)
+AC_SUBST(GENERATED_COMMENT)
 
 dnl Ensure that if prefix is specified, it does not end in a slash. If
 dnl it does, we get path names containing '//' which is both ugly and
@@ -867,7 +870,7 @@ cat >> conftest.c <<EOF
 
 EOF
 
-if $CPP conftest.c >conftest.out 2>/dev/null; then
+if $CPP $CPPFLAGS conftest.c >conftest.out 2>/dev/null; then
   PLATFORM_TRIPLET=`grep -v '^#' conftest.out | grep -v '^ *$' | tr -d ' 	'`
   AC_MSG_RESULT([$PLATFORM_TRIPLET])
 else
@@ -2281,7 +2284,7 @@ then
 	case $ac_sys_system/$ac_sys_release in
 	AIX*)
 		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
+		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
 		;;
 	IRIX/5*) LDSHARED="ld -shared";;
 	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;

@@ -1432,8 +1432,10 @@ call_method(PyObject *o, _Py_Identifier *nameid, char *format, ...)
 
     va_end(va);
 
-    if (args == NULL)
+    if (args == NULL) {
+        Py_DECREF(func);
         return NULL;
+    }
 
     assert(PyTuple_Check(args));
     retval = PyObject_Call(func, args, NULL);
@@ -1468,8 +1470,10 @@ call_maybe(PyObject *o, _Py_Identifier *nameid, char *format, ...)
 
     va_end(va);
 
-    if (args == NULL)
+    if (args == NULL) {
+        Py_DECREF(func);
         return NULL;
+    }
 
     assert(PyTuple_Check(args));
     retval = PyObject_Call(func, args, NULL);
@@ -1494,7 +1498,7 @@ call_maybe(PyObject *o, _Py_Identifier *nameid, char *format, ...)
 
     The next three properties are the 3 constraints in "C3".
 
-    Local precendece order.
+    Local precedence order.
     If A precedes B in C's MRO, then A will precede B in the MRO of all
     subclasses of C.
 

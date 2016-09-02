@@ -221,7 +221,6 @@ LIBOBJS=	@LIBOBJS@
 PYTHON=		python$(EXE)
 BUILDPYTHON=	python$(BUILDEXE)
 
-cross_compiling=@cross_compiling@
 PYTHON_FOR_GEN=@PYTHON_FOR_GEN@
 PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
 _PYTHON_HOST_PLATFORM=@_PYTHON_HOST_PLATFORM@
@@ -719,17 +718,13 @@ Programs/_freeze_importlib.o: Programs/_freeze_importlib.c Makefile
 Programs/_freeze_importlib: Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FROZEN)
 	$(LINKCC) $(PY_LDFLAGS) -o $@ Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FROZEN) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
-Python/importlib_external.h: $(srcdir)/Lib/importlib/_bootstrap_external.py Programs/_freeze_importlib
-	if test "$(cross_compiling)" != "yes"; then \
-	    ./Programs/_freeze_importlib \
-	        $(srcdir)/Lib/importlib/_bootstrap_external.py Python/importlib_external.h; \
-	fi
+Python/importlib_external.h: @GENERATED_COMMENT@ $(srcdir)/Lib/importlib/_bootstrap_external.py Programs/_freeze_importlib
+	./Programs/_freeze_importlib \
+	    $(srcdir)/Lib/importlib/_bootstrap_external.py Python/importlib_external.h
 
-Python/importlib.h: $(srcdir)/Lib/importlib/_bootstrap.py Programs/_freeze_importlib
-	if test "$(cross_compiling)" != "yes"; then \
-	    ./Programs/_freeze_importlib \
-	        $(srcdir)/Lib/importlib/_bootstrap.py Python/importlib.h; \
-	fi
+Python/importlib.h: @GENERATED_COMMENT@ $(srcdir)/Lib/importlib/_bootstrap.py Programs/_freeze_importlib
+	./Programs/_freeze_importlib \
+	    $(srcdir)/Lib/importlib/_bootstrap.py Python/importlib.h
 
 
 ############################################################################
@@ -789,22 +784,11 @@ Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile
 
 $(IO_OBJS): $(IO_H)
 
-$(GRAMMAR_H): $(GRAMMAR_INPUT) $(PGEN)
+$(GRAMMAR_H): @GENERATED_COMMENT@ $(GRAMMAR_INPUT) $(PGEN)
 	@$(MKDIR_P) Include
-	# Avoid copying the file onto itself for an in-tree build
-	if test "$(cross_compiling)" != "yes"; then \
-		$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C); \
-	else \
-		cp $(srcdir)/Include/graminit.h $(GRAMMAR_H).tmp; \
-		mv $(GRAMMAR_H).tmp $(GRAMMAR_H); \
-	fi
-$(GRAMMAR_C): $(GRAMMAR_H)
-	if test "$(cross_compiling)" != "yes"; then \
-		touch $(GRAMMAR_C); \
-	else \
-		cp $(srcdir)/Python/graminit.c $(GRAMMAR_C).tmp; \
-		mv $(GRAMMAR_C).tmp $(GRAMMAR_C); \
-	fi
+	$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
+$(GRAMMAR_C): @GENERATED_COMMENT@ $(GRAMMAR_H)
+	touch $(GRAMMAR_C)
 
 $(PGEN): $(PGENOBJS)
 		$(CC) $(OPT) $(PY_LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
@@ -1237,6 +1221,7 @@ LIBSUBDIRS=	tkinter tkinter/test tkinter/test/test_tkinter \
 		importlib test/test_importlib test/test_importlib/builtin \
 		test/test_importlib/extension test/test_importlib/frozen \
 		test/test_importlib/import_ test/test_importlib/source \
+		test/test_tools test/test_warnings test/test_warnings/data \
 		turtledemo \
 		multiprocessing multiprocessing/dummy \
 		unittest unittest/test unittest/test/testmock \
@@ -1423,10 +1408,10 @@ libainstall:	all python-config
 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
-	@if [ -s Programs/python.exp -a \
+	@if [ -s Modules/python.exp -a \
 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
-		$(INSTALL_DATA) Programs/python.exp		\
+		$(INSTALL_DATA) Modules/python.exp		\
 				$(DESTDIR)$(LIBPL)/python.exp;		\
 		echo; echo "$(LIBPL)/python.exp";		\
 		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
@@ -1564,10 +1549,10 @@ autoconf:
 # Create a tags file for vi
 tags::
 	cd $(srcdir); \
-	ctags -w -t Include/*.h; \
-	for i in $(SRCDIRS); do ctags -w -t -a $$i/*.[ch]; \
+	ctags -w Include/*.h; \
+	for i in $(SRCDIRS); do ctags -w -a $$i/*.[ch]; \
 	done; \
-	sort -o tags tags
+	LC_ALL=C sort -o tags tags
 
 # Create a tags file for GNU Emacs
 TAGS::
@@ -1636,7 +1621,7 @@ distclean: clobber
 	done
 	-rm -f core Makefile Makefile.pre config.status \
 		Modules/Setup Modules/Setup.local Modules/Setup.config \
-		Modules/ld_so_aix Programs/python.exp Misc/python.pc
+		Modules/ld_so_aix Modules/python.exp Misc/python.pc
 	-rm -f python*-gdb.py
 	find $(srcdir)/[a-zA-Z]* '(' -name '*.fdc' -o -name '*~' \
 				     -o -name '[@,#]*' -o -name '*.old' \
